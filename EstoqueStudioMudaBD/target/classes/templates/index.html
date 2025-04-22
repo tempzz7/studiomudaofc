@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body>
+    <div th:replace="~{layout :: menu}"></div>
+
+    <div class="container mt-5 animate__animated animate__fadeIn">
+        <div class="row mb-5">
+            <div class="col-lg-6 mb-4 mb-lg-0 d-flex align-items-center">
+                <div>
+                    <h1 class="display-4 fw-bold">Sistema de Estoque <span style="color: var(--accent-color);">Studio Muda</span></h1>
+                    <p class="lead my-4">Gerencie seu estoque, clientes, produtos e pedidos de forma simples e eficiente com nossa plataforma completa.</p>
+                    <div class="d-flex gap-3">
+                        <a href="/produtos" class="btn btn-primary"><i class="bi bi-tag me-2"></i>Ver Produtos</a>
+                        <a href="/pedidos" class="btn btn-outline-primary"><i class="bi bi-cart me-2"></i>Ver Pedidos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://img.freepik.com/free-vector/inventory-management-abstract-concept_335657-3015.jpg" alt="Gestão de Estoque" class="img-fluid rounded shadow" style="max-height: 350px; width: 100%; object-fit: cover;">
+            </div>
+        </div>
+        
+        <h2 class="text-center mb-4 mt-5">Módulos do Sistema</h2>
+        <div class="row g-4">
+            <div class="col-md-4 col-sm-6 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+                <div class="home-card card h-100">
+                    <div class="card-body text-center">
+                        <div class="card-icon">
+                            <i class="bi bi-tag"></i>
+                        </div>
+                        <h5 class="card-title">Produtos</h5>
+                        <p class="card-text">Cadastre, edite e gerencie todos os produtos do seu estoque.</p>
+                        <a href="/produtos" class="btn btn-primary"><i class="bi bi-arrow-right me-1"></i> Acessar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                <div class="home-card card h-100">
+                    <div class="card-body text-center">
+                        <div class="card-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h5 class="card-title">Clientes</h5>
+                        <p class="card-text">Mantenha um cadastro completo dos seus clientes e histórico.</p>
+                        <a href="/clientes" class="btn btn-primary"><i class="bi bi-arrow-right me-1"></i> Acessar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+                <div class="home-card card h-100">
+                    <div class="card-body text-center">
+                        <div class="card-icon">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+                        <h5 class="card-title">Funcionários</h5>
+                        <p class="card-text">Gerencie a equipe e controle os acessos ao sistema.</p>
+                        <a href="/funcionarios" class="btn btn-primary"><i class="bi bi-arrow-right me-1"></i> Acessar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                <div class="home-card card h-100">
+                    <div class="card-body text-center">
+                        <div class="card-icon">
+                            <i class="bi bi-cart"></i>
+                        </div>
+                        <h5 class="card-title">Pedidos</h5>
+                        <p class="card-text">Registre e acompanhe todos os pedidos realizados.</p>
+                        <a href="/pedidos" class="btn btn-primary"><i class="bi bi-arrow-right me-1"></i> Acessar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.5s">
+                <div class="home-card card h-100">
+                    <div class="card-body text-center">
+                        <div class="card-icon">
+                            <i class="bi bi-box"></i>
+                        </div>
+                        <h5 class="card-title">Movimentações</h5>
+                        <p class="card-text">Controle entradas, saídas e transferências no estoque.</p>
+                        <a href="/estoque" class="btn btn-primary"><i class="bi bi-arrow-right me-1"></i> Acessar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.6s">
+                <div class="home-card card h-100">
+                    <div class="card-body text-center">
+                        <div class="card-icon">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h5 class="card-title">Dashboard</h5>
+                        <p class="card-text">Visualize estatísticas e relatórios do seu negócio.</p>
+                        <a href="#" class="btn btn-primary"><i class="bi bi-arrow-right me-1"></i> Em breve</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5 mb-4">
+            <div class="col-12">
+                <div class="card bg-light border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4>Precisa de ajuda?</h4>
+                                <p class="mb-md-0">Entre em contato com nossa equipe de suporte para qualquer dúvida sobre o sistema.</p>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                                <a href="#" class="btn btn-primary"><i class="bi bi-headset me-2"></i>Suporte</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{layout :: footer}"></div>
+    <div th:replace="~{layout :: scripts}"></div>
+</body>
+</html>

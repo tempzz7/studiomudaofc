@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo API - Studio Muda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .panel {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 8px 12px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button.delete {
+            background-color: #f44336;
+        }
+        button.edit {
+            background-color: #2196F3;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .success {
+            color: green;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Exemplo de Integração com API REST</h1>
+    <p>Esta página demonstra como integrar o front-end com os endpoints REST do Studio Muda</p>
+    
+    <div class="container">
+        <div class="panel">
+            <h2>Lista de Clientes</h2>
+            <button id="loadClientes">Carregar Clientes</button>
+            <div id="clientesLista"></div>
+        </div>
+        
+        <div class="panel">
+            <h2>Formulário de Cliente</h2>
+            <form id="clienteForm">
+                <input type="hidden" id="clienteId" value="0">
+                
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefone">Telefone:</label>
+                    <input type="text" id="telefone" name="telefone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="endereco">Endereço:</label>
+                    <input type="text" id="endereco" name="endereco">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ativo">Ativo:</label>
+                    <select id="ativo" name="ativo">
+                        <option value="true">Sim</option>
+                        <option value="false">Não</option>
+                    </select>
+                </div>
+                
+                <button type="submit">Salvar</button>
+                <button type="button" id="limparForm">Limpar</button>
+            </form>
+            
+            <div id="mensagem"></div>
+        </div>
+    </div>
+    
+    <div class="panel">
+        <h2>Exemplo de Pedidos</h2>
+        <button id="loadPedidos">Carregar Pedidos</button>
+        <div id="pedidosLista"></div>
+    </div>
+
+    <script>
+        // URLs da API
+        const API_BASE_URL = '';
+        const CLIENTES_API_URL = `${API_BASE_URL}/clientes/api`;
+        const PEDIDOS_API_URL = `${API_BASE_URL}/pedidos/api`;
+        
+        // DOM Elements
+        const clientesLista = document.getElementById('clientesLista');
+        const pedidosLista = document.getElementById('pedidosLista');
+        const clienteForm = document.getElementById('clienteForm');
+        const mensagemDiv = document.getElementById('mensagem');
+        const clienteIdInput = document.getElementById('clienteId');
+        const nomeInput = document.getElementById('nome');
+        const emailInput = document.getElementById('email');
+        const telefoneInput = document.getElementById('telefone');
+        const enderecoInput = document.getElementById('endereco');
+        const ativoSelect = document.getElementById('ativo');
+        
+        // Event Listeners
+        document.getElementById('loadClientes').addEventListener('click', carregarClientes);
+        document.getElementById('loadPedidos').addEventListener('click', carregarPedidos);
+        document.getElementById('limparForm').addEventListener('click', limparFormulario);
+        clienteForm.addEventListener('submit', salvarCliente);
+        
+        // Funções para manipulação de clientes
+        function carregarClientes() {
+            fetch(CLIENTES_API_URL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar clientes');
+                    }
+                    return response.json();
+                })
+                .then(clientes => {
+                    exibirClientes(clientes);
+                })
+                .catch(error => {
+                    mostrarMensagem(error.message, true);
+                });
+        }
+        
+        function exibirClientes(clientes) {
+            if (clientes.length === 0) {
+                clientesLista.innerHTML = '<p>Nenhum cliente encontrado.</p>';
+                return;
+            }
+            
+            let html = '<table>';
+            html += '<tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Endereço</th><th>Ativo</th><th>Ações</th></tr>';
+            
+            clientes.forEach(cliente => {
+                html += `<tr>
+                    <td>${cliente.id}</td>
+                    <td>${cliente.nome || ''}</td>
+                    <td>${cliente.email || ''}</td>
+                    <td>${cliente.telefone || ''}</td>
+                    <td>${cliente.endereco || ''}</td>
+                    <td>${cliente.ativo ? 'Sim' : 'Não'}</td>
+                    <td>
+                        <button class="edit" onclick="editarCliente(${cliente.id})">Editar</button>
+                        <button class="delete" onclick="excluirCliente(${cliente.id})">Excluir</button>
+                    </td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            clientesLista.innerHTML = html;
+        }
+        
+        function editarCliente(id) {
+            fetch(`${CLIENTES_API_URL}/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar cliente');
+                    }
+                    return response.json();
+                })
+                .then(cliente => {
+                    clienteIdInput.value = cliente.id;
+                    nomeInput.value = cliente.nome || '';
+                    emailInput.value = cliente.email || '';
+                    telefoneInput.value = cliente.telefone || '';
+                    enderecoInput.value = cliente.endereco || '';
+                    ativoSelect.value = cliente.ativo.toString();
+                })
+                .catch(error => {
+                    mostrarMensagem(error.message, true);
+                });
+        }
+        
+        function salvarCliente(event) {
+            event.preventDefault();
+            
+            const cliente = {
+                id: parseInt(clienteIdInput.value) || 0,
+                nome: nomeInput.value,
+                email: emailInput.value,
+                telefone: telefoneInput.value,
+                endereco: enderecoInput.value,
+                ativo: ativoSelect.value === 'true'
+            };
+            
+            fetch(`${CLIENTES_API_URL}/salvar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cliente)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao salvar cliente');
+                }
+                return response.json();
+            })
+            .then(data => {
+                mostrarMensagem('Cliente salvo com sucesso!', false);
+                limparFormulario();
+                carregarClientes();
+            })
+            .catch(error => {
+                mostrarMensagem(error.message, true);
+            });
+        }
+        
+        function excluirCliente(id) {
+            if (!confirm('Tem certeza que deseja excluir este cliente?')) {
+                return;
+            }
+            
+            fetch(`${CLIENTES_API_URL}/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao excluir cliente');
+                }
+                return response.json();
+            })
+            .then(data => {
+                mostrarMensagem('Cliente excluído com sucesso!', false);
+                carregarClientes();
+            })
+            .catch(error => {
+                mostrarMensagem(error.message, true);
+            });
+        }
+        
+        function limparFormulario() {
+            clienteIdInput.value = '0';
+            clienteForm.reset();
+        }
+        
+        // Funções para manipulação de pedidos
+        function carregarPedidos() {
+            fetch(PEDIDOS_API_URL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar pedidos');
+                    }
+                    return response.json();
+                })
+                .then(pedidos => {
+                    exibirPedidos(pedidos);
+                })
+                .catch(error => {
+                    mostrarMensagem(error.message, true);
+                });
+        }
+        
+        function exibirPedidos(pedidos) {
+            if (pedidos.length === 0) {
+                pedidosLista.innerHTML = '<p>Nenhum pedido encontrado.</p>';
+                return;
+            }
+            
+            let html = '<table>';
+            html += '<tr><th>ID</th><th>Cliente</th><th>Data Requisição</th><th>Data Entrega</th><th>Status</th><th>Ações</th></tr>';
+            
+            pedidos.forEach(pedido => {
+                html += `<tr>
+                    <td>${pedido.id}</td>
+                    <td>${pedido.clienteNome || 'N/A'}</td>
+                    <td>${formatarData(pedido.dataRequisicao)}</td>
+                    <td>${formatarData(pedido.dataEntrega)}</td>
+                    <td>${pedido.status || 'N/A'}</td>
+                    <td>
+                        <button class="edit" onclick="verItensPedido(${pedido.id})">Ver Itens</button>
+                    </td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            pedidosLista.innerHTML = html;
+        }
+        
+        function verItensPedido(pedidoId) {
+            fetch(`${PEDIDOS_API_URL}/itens/${pedidoId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar itens do pedido');
+                    }
+                    return response.json();
+                })
+                .then(itens => {
+                    exibirItensPedido(itens, pedidoId);
+                })
+                .catch(error => {
+                    mostrarMensagem(error.message, true);
+                });
+        }
+        
+        function exibirItensPedido(itens, pedidoId) {
+            if (itens.length === 0) {
+                pedidosLista.innerHTML += `<p>Nenhum item encontrado para o pedido #${pedidoId}.</p>`;
+                return;
+            }
+            
+            let html = `<h3>Itens do Pedido #${pedidoId}</h3>`;
+            html += '<table>';
+            html += '<tr><th>ID</th><th>Produto</th><th>Quantidade</th><th>Preço</th><th>Subtotal</th></tr>';
+            
+            let total = 0;
+            itens.forEach(item => {
+                const subtotal = item.quantidade * item.preco;
+                total += subtotal;
+                
+                html += `<tr>
+                    <td>${item.id}</td>
+                    <td>${item.produtoNome || 'N/A'}</td>
+                    <td>${item.quantidade}</td>
+                    <td>R$ ${item.preco.toFixed(2)}</td>
+                    <td>R$ ${subtotal.toFixed(2)}</td>
+                </tr>`;
+            });
+            
+            html += `<tr><td colspan="4" style="text-align: right;"><strong>Total:</strong></td><td>R$ ${total.toFixed(2)}</td></tr>`;
+            html += '</table>';
+            
+            pedidosLista.innerHTML += html;
+        }
+        
+        // Funções utilitárias
+        function mostrarMensagem(texto, isError) {
+            mensagemDiv.innerHTML = texto;
+            mensagemDiv.className = isError ? 'error' : 'success';
+            
+            // Limpar mensagem após 5 segundos
+            setTimeout(() => {
+                mensagemDiv.innerHTML = '';
+                mensagemDiv.className = '';
+            }, 5000);
+        }
+        
+        function formatarData(dataString) {
+            if (!dataString) return 'N/A';
+            
+            const data = new Date(dataString);
+            return data.toLocaleDateString('pt-BR');
+        }
+        
+        // Funções globais que precisam estar acessíveis no escopo global
+        window.editarCliente = editarCliente;
+        window.excluirCliente = excluirCliente;
+        window.verItensPedido = verItensPedido;
+    </script>
+</body>
+</html>

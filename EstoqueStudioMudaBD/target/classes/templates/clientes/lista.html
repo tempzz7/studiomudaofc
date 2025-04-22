@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head>
+<body>
+    <div th:replace="layout :: menu"></div>
+    
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Lista de Clientes</h2>
+            <a href="/clientes/novo" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Novo Cliente
+            </a>
+        </div>
+        
+        <div class="alert alert-info" th:if="${clientes.empty}">
+            Nenhum cliente cadastrado.
+        </div>
+        
+        <div class="table-responsive" th:if="${!clientes.empty}">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>CPF/CNPJ</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Cidade/UF</th>
+                        <th>Status</th>
+                        <th>Au00e7u00f5es</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cliente : ${clientes}">
+                        <td th:text="${cliente.id}"></td>
+                        <td th:text="${cliente.nome}"></td>
+                        <td th:text="${cliente.tipo == 'PF' ? 'Pessoa Fu00edsica' : 'Pessoa Juru00eddica'}"></td>
+                        <td th:text="${cliente.cpfCnpj}"></td>
+                        <td th:text="${cliente.telefone}"></td>
+                        <td th:text="${cliente.email}"></td>
+                        <td th:text="${cliente.cidade + '/' + cliente.estado}"></td>
+                        <td>
+                            <span th:if="${cliente.ativo}" class="badge bg-success">Ativo</span>
+                            <span th:unless="${cliente.ativo}" class="badge bg-danger">Inativo</span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" class="btn btn-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a th:href="@{/clientes/excluir/{id}(id=${cliente.id})}" class="btn btn-danger"
+                                   onclick="return confirm('Tem certeza que deseja inativar este cliente?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div th:replace="layout :: footer"></div>
+    <div th:replace="layout :: scripts"></div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head>
+<body>
+    <div th:replace="layout :: menu"></div>
+    
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 th:text="${pedido.id == 0 ? 'Novo Pedido' : 'Editar Pedido'}"></h3>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/pedidos/salvar}" th:object="${pedido}" method="post">
+                    <input type="hidden" name="id" th:value="${pedido.id}">
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="clienteId" class="form-label">Cliente</label>
+                            <select class="form-select" id="clienteId" name="clienteId" required>
+                                <option value="">Selecione um cliente</option>
+                                <option th:each="cliente : ${clientes}" 
+                                        th:value="${cliente.id}" 
+                                        th:text="${cliente.nome}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="dataRequisicao" class="form-label">Data de Requisição</label>
+                            <input type="date" class="form-control" id="dataRequisicao" name="dataRequisicaoStr" th:value="${pedido.dataRequisicao != null ? #dates.format(pedido.dataRequisicao, 'yyyy-MM-dd') : #dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dataEntrega" class="form-label">Data de Entrega</label>
+                            <input type="date" class="form-control" id="dataEntrega" name="dataEntregaStr" th:value="${pedido.dataEntrega != null ? #dates.format(pedido.dataEntrega, 'yyyy-MM-dd') : ''}">
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="/pedidos" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Voltar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Salvar e Continuar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="layout :: footer"></div>
+    <div th:replace="layout :: scripts"></div>
+</body>
+</html>

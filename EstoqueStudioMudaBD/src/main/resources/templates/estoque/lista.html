@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head>
+<body>
+    <div th:replace="layout :: menu"></div>
+    
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Movimentações de Estoque</h2>
+            <a href="/estoque/nova" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Nova Movimentação
+            </a>
+        </div>
+        
+        <div class="alert alert-info" th:if="${movimentacoes.empty}">
+            Nenhuma movimentação registrada.
+        </div>
+        
+        <div class="table-responsive" th:if="${!movimentacoes.empty}">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Produto</th>
+                        <th>Tipo</th>
+                        <th>Quantidade</th>
+                        <th>Motivo</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="mov : ${movimentacoes}">
+                        <td th:text="${mov.id}"></td>
+                        <td th:text="${mov.produtoNome != null ? mov.produtoNome : 'N/A'}"></td>
+                        <td>
+                            <span th:if="${mov.tipo == 'entrada'}" class="badge bg-success">Entrada</span>
+                            <span th:if="${mov.tipo == 'saida'}" class="badge bg-danger">Saída</span>
+                        </td>
+                        <td th:text="${mov.quantidade}"></td>
+                        <td th:text="${mov.motivo}"></td>
+                        <td th:text="${#dates.format(mov.data, 'dd/MM/yyyy')}"></td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-danger" th:onclick="'excluirMovimentacao(' + ${mov.id} + ')'">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div th:replace="layout :: footer"></div>
+    <div th:replace="layout :: scripts"></div>
+</body>
+</html>

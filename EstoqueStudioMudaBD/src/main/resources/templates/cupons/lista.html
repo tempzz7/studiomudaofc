@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head>
+<body>
+    <div th:replace="layout :: menu"></div>
+    
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 th:text="${apenasValidos != null && apenasValidos ? 'Cupons Válidos' : 'Lista de Cupons'}"></h2>
+            <div>
+                <a th:if="${apenasValidos == null || !apenasValidos}" href="/cupons/validos" class="btn btn-info me-2">
+                    <i class="bi bi-check-circle"></i> Ver Apenas Válidos
+                </a>
+                <a th:if="${apenasValidos != null && apenasValidos}" href="/cupons" class="btn btn-secondary me-2">
+                    <i class="bi bi-list"></i> Ver Todos
+                </a>
+                <a href="/cupons/novo" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Novo Cupom
+                </a>
+            </div>
+        </div>
+        
+        <div class="alert alert-info" th:if="${cupons.empty}">
+            Nenhum cupom cadastrado.
+        </div>
+        
+        <div class="table-responsive" th:if="${!cupons.empty}">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Código</th>
+                        <th>Valor</th>
+                        <th>Data Início</th>
+                        <th>Validade</th>
+                        <th>Status</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cupom : ${cupons}">
+                        <td th:text="${cupom.id}"></td>
+                        <td th:text="${cupom.codigo}"></td>
+                        <td th:text="${'R$ ' + #numbers.formatDecimal(cupom.valor, 1, 2)}"></td>
+                        <td th:text="${cupom.dataInicio}"></td>
+                        <td th:text="${cupom.validade}"></td>
+                        <td>
+                            <span th:if="${cupom.valido}" class="badge bg-success">Válido</span>
+                            <span th:unless="${cupom.valido}" class="badge bg-danger">Expirado</span>
+                        </td>
+                        <td th:text="${cupom.descricao != null && !cupom.descricao.empty ? cupom.descricao : 'Sem descrição'}"></td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a th:href="@{/cupons/editar/{id}(id=${cupom.id})}" class="btn btn-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a th:href="@{/cupons/excluir/{id}(id=${cupom.id})}" class="btn btn-danger"
+                                   onclick="return confirm('Tem certeza que deseja excluir este cupom?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div th:replace="layout :: footer"></div>
+    <div th:replace="layout :: scripts"></div>
+</body>
+</html>

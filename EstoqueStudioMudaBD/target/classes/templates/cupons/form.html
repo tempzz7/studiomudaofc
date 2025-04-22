@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head>
+<body>
+    <div th:replace="layout :: menu"></div>
+    
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 th:text="${cupom.id == 0 ? 'Novo Cupom' : 'Editar Cupom'}"></h3>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/cupons/salvar}" th:object="${cupom}" method="post">
+                    <input type="hidden" th:field="*{id}">
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="codigo" class="form-label">Código do Cupom</label>
+                            <input type="text" class="form-control" id="codigo" th:field="*{codigo}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="valor" class="form-label">Valor do Desconto (R$)</label>
+                            <input type="number" class="form-control" id="valor" th:field="*{valor}" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="dataInicioStr" class="form-label">Data de Início</label>
+                            <input type="date" class="form-control" id="dataInicioStr" name="dataInicioStr" 
+                                   th:value="${cupom.dataInicio}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="validadeStr" class="form-label">Data de Validade</label>
+                            <input type="date" class="form-control" id="validadeStr" name="validadeStr" 
+                                   th:value="${cupom.validade}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="descricao" th:field="*{descricao}" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="condicoesUso" class="form-label">Condições de Uso</label>
+                        <textarea class="form-control" id="condicoesUso" th:field="*{condicoesUso}" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="/cupons" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Voltar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="layout :: footer"></div>
+    <div th:replace="layout :: scripts"></div>
+</body>
+</html>
