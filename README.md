@@ -1,6 +1,10 @@
 # 🌿 Studio Muda - Sistema de Controle de Estoque
 
-Sistema desenvolvido para a empresa fictícia **Studio Muda LTDA**, especializada em paisagismo e comercialização de produtos naturais. O sistema permite o controle total de produtos, pedidos, clientes, funcionários e movimentações de estoque.
+Sistema desenvolvido para a empresa **Studio Muda LTDA**, especializada em paisagismo e comercialização de produtos naturais. O sistema permite o controle total de produtos, pedidos, clientes, funcionários e movimentações de estoque.
+
+## Drive
+
+[Conceitual - StudioMuda.brM3 | Logo - StudioMuda.brM3 | MiniMundo - StudioMuda | Relatório versão 1.0 - StudioMuda.pdf](https://drive.google.com/drive/folders/1qwyT-uzrC67BZYqoUOrW95nYa3ip0eBV)
 
 ---
 
