@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+    <title>Dashboard</title>
+</head>
+<body>
+<div th:replace="layout :: menu"></div>
+<div class="container mt-4">
+    <h2>Dashboard</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">Top 10 Itens Mais Vendidos</div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade Vendida</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${topProdutos}">
+                            <td th:text="${item.produtoNome}"></td>
+                            <td th:text="${item.quantidadeVendida}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">Top 10 Clientes</div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Total de Pedidos</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="cliente : ${topClientes}">
+                            <td th:text="${cliente.nome}"></td>
+                            <td th:text="${cliente.totalPedidos}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="layout :: footer"></div>
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

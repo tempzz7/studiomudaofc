@@ -22,9 +22,9 @@
                     <tr>
                         <th>ID</th>
                         <th>Cliente</th>
-                        <th>Data Requisiu00e7u00e3o</th>
+                        <th>Data Requisição</th>
                         <th>Data Entrega</th>
-                        <th>Au00e7u00f5es</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,7 +32,7 @@
                         <td th:text="${pedido.id}"></td>
                         <td th:text="${pedido.clienteNome}"></td>
                         <td th:text="${#dates.format(pedido.dataRequisicao, 'dd/MM/yyyy')}"></td>
-                        <td th:text="${pedido.dataEntrega != null ? #dates.format(pedido.dataEntrega, 'dd/MM/yyyy') : 'Nu00e3o definida'}"></td>
+                        <td th:text="${pedido.dataEntrega != null ? #dates.format(pedido.dataEntrega, 'dd/MM/yyyy') : 'Não definida'}"></td>
                         <td>
                             <div class="btn-group btn-group-sm">
                                 <a th:href="@{/pedidos/itens/{id}(id=${pedido.id})}" class="btn btn-info">

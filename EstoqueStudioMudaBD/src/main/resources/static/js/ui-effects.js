@@ -1,3 +1,93 @@
+// Máscara e validação para CPF/CNPJ e telefone
+document.addEventListener('DOMContentLoaded', function() {
+    // Máscara CPF/CNPJ
+    function maskCpfCnpj(value) {
+        value = value.replace(/\D/g, '');
+        if (value.length <= 11) {
+            // CPF: 000.000.000-00
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        } else {
+            // CNPJ: 00.000.000/0000-00
+            value = value.replace(/(\d{2})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d)/, '$1/$2');
+            value = value.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+        }
+        return value;
+    }
+
+    // Máscara telefone
+    function maskTelefone(value) {
+        value = value.replace(/\D/g, '');
+        if (value.length > 10) {
+            // Celular: (00) 00000-0000
+            value = value.replace(/(\d{2})(\d)/, '($1) $2');
+            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+        } else {
+            // Fixo: (00) 0000-0000
+            value = value.replace(/(\d{2})(\d)/, '($1) $2');
+            value = value.replace(/(\d{4})(\d)/, '$1-$2');
+        }
+        return value;
+    }
+
+    // Máscara CEP
+    function maskCep(value) {
+        value = value.replace(/\D/g, '');
+        if (value.length > 5) {
+            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+        }
+        return value;
+    }
+
+    // Aplica máscara no campo de CEP
+    const cepInput = document.getElementById('cep');
+    if (cepInput) {
+        cepInput.addEventListener('input', function(e) {
+            this.value = maskCep(this.value);
+        });
+    }
+
+    // Aplica máscara nos campos de cliente e funcionário
+    const cpfCnpjInput = document.getElementById('cpfCnpj') || document.getElementById('cpf');
+    if (cpfCnpjInput) {
+        cpfCnpjInput.addEventListener('input', function(e) {
+            this.value = maskCpfCnpj(this.value);
+        });
+    }
+    const telefoneInput = document.getElementById('telefone');
+    if (telefoneInput) {
+        telefoneInput.addEventListener('input', function(e) {
+            this.value = maskTelefone(this.value);
+        });
+    }
+
+    // Validação ao submeter formulário de cliente/funcionário
+    const form = document.querySelector('form');
+    if (form && (cpfCnpjInput || telefoneInput)) {
+        form.addEventListener('submit', function(e) {
+            let erro = '';
+            if (cpfCnpjInput) {
+                const val = cpfCnpjInput.value.replace(/\D/g, '');
+                if (val.length !== 11 && val.length !== 14) {
+                    erro = 'CPF deve ter 11 dígitos ou CNPJ 14 dígitos.';
+                }
+            }
+            if (!erro && telefoneInput) {
+                const val = telefoneInput.value.replace(/\D/g, '');
+                if (val.length < 10 || val.length > 11) {
+                    erro = 'Telefone deve ter 10 ou 11 dígitos.';
+                }
+            }
+            if (erro) {
+                e.preventDefault();
+                showNotification(erro, 'error');
+            }
+        });
+    }
+});
 // UI Effects e melhorias visuais para o Sistema de Estoque Studio Muda
 
 document.addEventListener('DOMContentLoaded', function() {

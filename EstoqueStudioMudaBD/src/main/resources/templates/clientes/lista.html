@@ -28,14 +28,14 @@
                         <th>Email</th>
                         <th>Cidade/UF</th>
                         <th>Status</th>
-                        <th>Au00e7u00f5es</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="cliente : ${clientes}">
                         <td th:text="${cliente.id}"></td>
                         <td th:text="${cliente.nome}"></td>
-                        <td th:text="${cliente.tipo == 'PF' ? 'Pessoa Fu00edsica' : 'Pessoa Juru00eddica'}"></td>
+                        <td th:text="${cliente.tipo == 'PF' ? 'Pessoa Física' : 'Pessoa Jurídica'}"></td>
                         <td th:text="${cliente.cpfCnpj}"></td>
                         <td th:text="${cliente.telefone}"></td>
                         <td th:text="${cliente.email}"></td>
