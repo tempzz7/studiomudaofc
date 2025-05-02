@@ -22,10 +22,10 @@
                         <p><strong>Cliente:</strong> <span th:text="${pedido.clienteNome}"></span></p>
                     </div>
                     <div class="col-md-4">
-                        <p><strong>Data Requisiu00e7u00e3o:</strong> <span th:text="${#dates.format(pedido.dataRequisicao, 'dd/MM/yyyy')}"></span></p>
+                        <p><strong>Data Requisição:</strong> <span th:text="${#dates.format(pedido.dataRequisicao, 'dd/MM/yyyy')}"></span></p>
                     </div>
                     <div class="col-md-4">
-                        <p><strong>Data Entrega:</strong> <span th:text="${pedido.dataEntrega != null ? #dates.format(pedido.dataEntrega, 'dd/MM/yyyy') : 'Nu00e3o definida'}"></span></p>
+                        <p><strong>Data Entrega:</strong> <span th:text="${pedido.dataEntrega != null ? #dates.format(pedido.dataEntrega, 'dd/MM/yyyy') : 'Não definida'}"></span></p>
                     </div>
                 </div>
             </div>

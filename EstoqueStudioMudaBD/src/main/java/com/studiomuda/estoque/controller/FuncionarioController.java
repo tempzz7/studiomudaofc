@@ -38,22 +38,74 @@ public class FuncionarioController {
     }
 
     @PostMapping("/salvar")
-    public String salvarFuncionario(@ModelAttribute Funcionario funcionario, @RequestParam(value = "dataNascimento", required = false) String dataNascimento) {
+    public String salvarFuncionario(@ModelAttribute Funcionario funcionario, @RequestParam(value = "dataNascimento", required = false) String dataNascimento, Model model) {
         try {
-            // Converter a string de data para Date se não for nula
+            // Validação manual básica
+            if (funcionario.getNome() == null || funcionario.getNome().trim().isEmpty()) {
+                model.addAttribute("mensagemErro", "O nome é obrigatório.");
+                model.addAttribute("funcionario", funcionario);
+                return "funcionarios/form";
+            }
+            if (funcionario.getCpf() == null || funcionario.getCpf().trim().isEmpty()) {
+                model.addAttribute("mensagemErro", "O CPF é obrigatório.");
+                model.addAttribute("funcionario", funcionario);
+                return "funcionarios/form";
+            }
+            // Validação de tamanho do CPF (11 dígitos sem máscara)
+            String cpfLimpo = funcionario.getCpf().replaceAll("[^0-9]", "");
+            if (cpfLimpo.length() != 11) {
+                model.addAttribute("mensagemErro", "O CPF deve conter 11 dígitos.");
+                model.addAttribute("funcionario", funcionario);
+                return "funcionarios/form";
+            }
+            // Atribui o valor limpo de volta ao objeto antes de salvar
+            funcionario.setCpf(cpfLimpo);
+            if (funcionario.getCargo() == null || funcionario.getCargo().trim().isEmpty()) {
+                model.addAttribute("mensagemErro", "O cargo é obrigatório.");
+                model.addAttribute("funcionario", funcionario);
+                return "funcionarios/form";
+            }
+
+            // Validação global de CPF (cliente e funcionário)
+            com.studiomuda.estoque.dao.ClienteDAO clienteDAO = new com.studiomuda.estoque.dao.ClienteDAO();
+            com.studiomuda.estoque.model.Cliente existenteCliente = clienteDAO.buscarPorCpfCnpj(cpfLimpo);
+            Funcionario existenteFuncionario = funcionarioDAO.buscarPorCpf(cpfLimpo);
+            boolean duplicado = false;
+            if (funcionario.getId() == 0) {
+                // Cadastro novo
+                if (existenteFuncionario != null || existenteCliente != null) {
+                    duplicado = true;
+                }
+            } else {
+                // Edição
+                if ((existenteFuncionario != null && existenteFuncionario.getId() != funcionario.getId()) || existenteCliente != null) {
+                    duplicado = true;
+                }
+            }
+            if (duplicado) {
+                model.addAttribute("mensagemErro", "Já existe um cliente ou funcionário com esse CPF/CNPJ cadastrado.");
+                model.addAttribute("funcionario", funcionario);
+                return "funcionarios/form";
+            }
+
             if (dataNascimento != null && !dataNascimento.isEmpty()) {
                 funcionario.setData_nasc(Date.valueOf(dataNascimento));
             }
-            
             if (funcionario.getId() == 0) {
                 funcionarioDAO.inserir(funcionario);
             } else {
                 funcionarioDAO.atualizar(funcionario);
             }
             return "redirect:/funcionarios";
+        } catch (SQLException e) {
+            String msg = e.getMessage();
+            model.addAttribute("mensagemErro", "Erro ao salvar funcionário: " + msg);
+            model.addAttribute("funcionario", funcionario);
+            return "funcionarios/form";
         } catch (Exception e) {
-            e.printStackTrace();
-            return "redirect:/erro?mensagem=" + e.getMessage();
+            model.addAttribute("mensagemErro", "Erro inesperado ao salvar funcionário. Por favor, revise os dados e tente novamente.");
+            model.addAttribute("funcionario", funcionario);
+            return "funcionarios/form";
         }
     }
 

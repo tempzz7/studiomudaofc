@@ -10,6 +10,7 @@
                 <h3 th:text="${cliente.id == 0 ? 'Novo Cliente' : 'Editar Cliente'}"></h3>
             </div>
             <div class="card-body">
+                <div th:if="${mensagemErro}" class="alert alert-danger mb-3" th:text="${mensagemErro}"></div>
                 <form th:action="@{/clientes/salvar}" th:object="${cliente}" method="post">
                     <input type="hidden" th:field="*{id}">
                     

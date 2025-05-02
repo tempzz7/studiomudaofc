@@ -50,8 +50,72 @@ public class ClienteController {
     }
 
     @PostMapping("/salvar")
-    public String salvarCliente(@ModelAttribute Cliente cliente) {
+    public String salvarCliente(@ModelAttribute Cliente cliente, Model model) {
         try {
+            // Validação manual básica (pode ser expandida)
+            if (cliente.getNome() == null || cliente.getNome().trim().isEmpty()) {
+                model.addAttribute("mensagemErro", "O nome é obrigatório.");
+                model.addAttribute("cliente", cliente);
+                return "clientes/form";
+            }
+            if (cliente.getCpfCnpj() == null || cliente.getCpfCnpj().trim().isEmpty()) {
+                model.addAttribute("mensagemErro", "O CPF/CNPJ é obrigatório.");
+                model.addAttribute("cliente", cliente);
+                return "clientes/form";
+            }
+            // Validação de tamanho de CPF/CNPJ ignorando máscara
+            String cpfCnpjLimpo = cliente.getCpfCnpj().replaceAll("[^0-9]", "");
+            String tipo = cliente.getTipo();
+            if (tipo == null || tipo.trim().isEmpty()) tipo = "PF";
+            if ("PF".equalsIgnoreCase(tipo)) {
+                if (cpfCnpjLimpo.length() != 11) {
+                    model.addAttribute("mensagemErro", "O CPF deve conter exatamente 11 dígitos. Valor informado: " + cpfCnpjLimpo);
+                    model.addAttribute("cliente", cliente);
+                    return "clientes/form";
+                }
+            } else if ("PJ".equalsIgnoreCase(tipo)) {
+                if (cpfCnpjLimpo.length() != 14) {
+                    model.addAttribute("mensagemErro", "O CNPJ deve conter exatamente 14 dígitos. Valor informado: " + cpfCnpjLimpo);
+                    model.addAttribute("cliente", cliente);
+                    return "clientes/form";
+                }
+            }
+            // Atribui o valor limpo de volta ao objeto antes de salvar
+            cliente.setCpfCnpj(cpfCnpjLimpo);
+            if (cliente.getEmail() == null || cliente.getEmail().trim().isEmpty()) {
+                model.addAttribute("mensagemErro", "O e-mail é obrigatório.");
+                model.addAttribute("cliente", cliente);
+                return "clientes/form";
+            }
+            // Exemplo de validação de formato de e-mail
+            if (!cliente.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                model.addAttribute("mensagemErro", "E-mail em formato inválido.");
+                model.addAttribute("cliente", cliente);
+                return "clientes/form";
+            }
+
+            // Validação global de CPF/CNPJ (cliente e funcionário)
+            com.studiomuda.estoque.dao.FuncionarioDAO funcionarioDAO = new com.studiomuda.estoque.dao.FuncionarioDAO();
+            Cliente existenteCliente = clienteDAO.buscarPorCpfCnpj(cpfCnpjLimpo);
+            com.studiomuda.estoque.model.Funcionario existenteFuncionario = funcionarioDAO.buscarPorCpf(cpfCnpjLimpo);
+            boolean duplicado = false;
+            if (cliente.getId() == 0) {
+                // Cadastro novo
+                if (existenteCliente != null || existenteFuncionario != null) {
+                    duplicado = true;
+                }
+            } else {
+                // Edição
+                if ((existenteCliente != null && existenteCliente.getId() != cliente.getId()) || existenteFuncionario != null) {
+                    duplicado = true;
+                }
+            }
+            if (duplicado) {
+                model.addAttribute("mensagemErro", "Já existe um cliente ou funcionário com esse CPF/CNPJ cadastrado.");
+                model.addAttribute("cliente", cliente);
+                return "clientes/form";
+            }
+
             if (cliente.getId() == 0) {
                 clienteDAO.inserir(cliente);
             } else {
@@ -59,7 +123,14 @@ public class ClienteController {
             }
             return "redirect:/clientes";
         } catch (SQLException e) {
-            return "redirect:/erro?mensagem=" + e.getMessage();
+            String msg = e.getMessage();
+            model.addAttribute("mensagemErro", "Erro ao salvar cliente: " + msg);
+            model.addAttribute("cliente", cliente);
+            return "clientes/form";
+        } catch (Exception e) {
+            model.addAttribute("mensagemErro", "Erro inesperado ao salvar cliente. Por favor, revise os dados e tente novamente.");
+            model.addAttribute("cliente", cliente);
+            return "clientes/form";
         }
     }
     
