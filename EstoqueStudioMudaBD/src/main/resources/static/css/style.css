@@ -1,15 +1,38 @@
+
+/* Logo grande sem aumentar a navbar */
+.navbar {
+  min-height: 64px !important;
+  height: 64px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.navbar-brand img {
+  height: 96px !important;
+  width: auto;
+  max-height: none !important;
+  display: block;
+  margin-top: -32px;
+  margin-bottom: -32px;
+  margin-left: -56px;
+}
 /* Estilos personalizados para o Sistema de Estoque Studio Muda */
 
 :root {
-  --primary-color: #3a6ea5;
-  --secondary-color: #ff6b6b;
-  --accent-color: #6a0572;
+  --primary-color: #355E3B; /* Verde escuro - folhagem */
+  --secondary-color: #F6F5EC; /* Bege claro - fundo */
+  --accent-color: #A3C9A8; /* Verde claro - musgo */
+  --earth-color: #B7A16A; /* Marrom claro - terra */
+  --black-detail: #111111; /* Preto - detalhes/logo */
   --light-bg: #f8f9fa;
-  --dark-bg: #343a40;
-  --success-color: #28a745;
+  --dark-bg: #222;
+  --success-color: #4CAF50;
   --warning-color: #ffc107;
   --danger-color: #dc3545;
-  --text-color: #333;
+  --text-color: #355E3B;
   --light-text: #f8f9fa;
   --border-radius: 8px;
   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -19,24 +42,25 @@
 body {
   font-family: 'Poppins', sans-serif;
   color: var(--text-color);
-  background-color: #f5f7fa;
+  background-color: var(--secondary-color);
 }
 
 /* Navbar personalizada */
 .navbar {
-  background: linear-gradient(135deg, var(--primary-color), var(--accent-color)) !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: var(--primary-color) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
   padding: 0.8rem 1rem;
 }
 
 .navbar-brand {
   font-weight: 700;
   font-size: 1.5rem;
-  color: white !important;
+  color: var(--black-detail) !important;
+  letter-spacing: 1px;
 }
 
 .navbar-dark .navbar-nav .nav-link {
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: var(--secondary-color) !important;
   font-weight: 500;
   padding: 0.5rem 1rem;
   transition: var(--transition);
@@ -46,8 +70,17 @@ body {
 
 .navbar-dark .navbar-nav .nav-link:hover,
 .navbar-dark .navbar-nav .nav-link.active {
-  color: white !important;
-  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--secondary-color) !important;
+  background-color: var(--primary-color) !important;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+
+
+.navbar-dark .navbar-nav .nav-link:hover,
+  color: var(--secondary-color) !important;
+  background-color: var(--primary-color) !important;
 }
 
 /* Cards personalizados */
@@ -55,6 +88,8 @@ body {
   border: none;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
+  background: #fff;
+  border-top: 4px solid var(--accent-color);
   transition: var(--transition);
   overflow: hidden;
   height: 100%;
@@ -91,11 +126,13 @@ body {
 .btn-primary {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
+  color: var(--secondary-color);
 }
 
 .btn-primary:hover {
-  background-color: #2c5282;
-  border-color: #2c5282;
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--primary-color);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
@@ -113,11 +150,12 @@ body {
 .btn-outline-primary {
   color: var(--primary-color);
   border-color: var(--primary-color);
+  background: var(--secondary-color);
 }
 
 .btn-outline-primary:hover {
   background-color: var(--primary-color);
-  color: white;
+  color: var(--secondary-color);
 }
 
 /* Jumbotron personalizado */
@@ -167,11 +205,11 @@ body {
 
 .table thead {
   background-color: var(--primary-color);
-  color: white;
+  color: var(--secondary-color);
 }
 
 .table-hover tbody tr:hover {
-  background-color: rgba(58, 110, 165, 0.05);
+  background-color: var(--accent-color);
 }
 
 /* Formulários */
@@ -194,7 +232,8 @@ body {
 
 /* Footer */
 footer {
-  background: linear-gradient(135deg, var(--primary-color), var(--accent-color)) !important;
+  background: var(--primary-color) !important;
+  color: var(--earth-color);
   padding: 1.5rem 0;
 }
 
