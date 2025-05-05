@@ -16,6 +16,8 @@ O sistema implementa uma solução completa de gerenciamento empresarial com as 
 
 ## ✅ Módulos Implementados
 
+[Conceitual - StudioMuda.brM3 | Logo - StudioMuda.brM3 | MiniMundo - StudioMuda | Relatório versão 1.0 - StudioMuda.pdf](https://drive.google.com/drive/folders/1qwyT-uzrC67BZYqoUOrW95nYa3ip0eBV)
+
 ### 1. 📦 Produtos
 - CRUD completo: cadastrar, listar, atualizar e deletar produtos.
 - Campos: `nome`, `descricao`, `tipo`, `valor`, `quantidade`.
