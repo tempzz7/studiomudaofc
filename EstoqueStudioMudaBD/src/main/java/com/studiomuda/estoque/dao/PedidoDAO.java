@@ -25,6 +25,7 @@ public class PedidoDAO {
                 stmt.setNull(4, java.sql.Types.INTEGER);
             }
             
+            // Quando cupomId é 0, salva como NULL no banco
             if (pedido.getCupomId() > 0) {
                 stmt.setInt(5, pedido.getCupomId());
                 stmt.setDouble(6, pedido.getValorDesconto());

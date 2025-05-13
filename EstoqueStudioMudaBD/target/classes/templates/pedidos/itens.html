@@ -31,7 +31,7 @@
                         <p><strong>Data Entrega:</strong> <span th:text="${pedido.dataEntrega != null ? #dates.format(pedido.dataEntrega, 'dd/MM/yyyy') : 'Não definida'}"></span></p>
                     </div>
                 </div>
-                <div class="row" th:if="${pedido.cupomId > 0}">
+                <div class="row" th:if="${pedido.cupomId != null && pedido.cupomId > 0}">
                     <div class="col-md-12">
                         <p class="text-success"><strong>Cupom aplicado:</strong> <span th:text="'Desconto de R$ ' + ${#numbers.formatDecimal(pedido.valorDesconto, 1, 'POINT', 2, 'COMMA')}"></span></p>
                     </div>
@@ -115,17 +115,17 @@
                             </tr>
                         </tbody>
                         <tfoot>
-                            <tr th:if="${pedido.valorDesconto > 0}" class="table-secondary">
+                            <tr th:if="${pedido.valorDesconto != null && pedido.valorDesconto > 0}" class="table-secondary">
                                 <td colspan="4" class="text-end"><strong>Subtotal:</strong></td>
                                 <td colspan="2"><span th:text="${'R$ ' + #numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}"></span></td>
                             </tr>
-                            <tr th:if="${pedido.valorDesconto > 0}" class="table-success">
+                            <tr th:if="${pedido.valorDesconto != null && pedido.valorDesconto > 0}" class="table-success">
                                 <td colspan="4" class="text-end text-success"><strong>Desconto aplicado:</strong></td>
                                 <td colspan="2" class="text-success"><span th:text="${'- R$ ' + #numbers.formatDecimal(pedido.valorDesconto, 1, 'POINT', 2, 'COMMA')}"></span></td>
                             </tr>
                             <tr class="table-dark">
                                 <td colspan="4" class="text-end"><strong>Total:</strong></td>
-                                <td colspan="2"><strong th:text="${pedido.valorDesconto > 0 ? 'R$ ' + #numbers.formatDecimal(valorComDesconto, 1, 'POINT', 2, 'COMMA') : 'R$ ' + #numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}"></strong></td>
+                                <td colspan="2"><strong th:text="${(pedido.valorDesconto != null && pedido.valorDesconto > 0) ? 'R$ ' + #numbers.formatDecimal(valorComDesconto, 1, 'POINT', 2, 'COMMA') : 'R$ ' + #numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}"></strong></td>
                             </tr>
                         </tfoot>
                     </table>

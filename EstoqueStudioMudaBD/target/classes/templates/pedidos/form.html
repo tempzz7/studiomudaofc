@@ -33,6 +33,7 @@
                                         th:text="${funcionario.nome + ' (' + funcionario.cargo + ')'}"
                                         th:selected="${funcionario.id == pedido.funcionarioId}"></option>
                             </select>
+                            
                         </div>
                     </div>
                     
@@ -51,7 +52,7 @@
                         <div class="col-md-6">
                             <label for="cupomId" class="form-label">Cupom de Desconto</label>
                             <select class="form-select" id="cupomId" name="cupomId">
-                                <option value="">Sem cupom</option>
+                                <option value="0">Sem cupom</option>
                                 <option th:each="cupom : ${cupons}" 
                                         th:value="${cupom.id}" 
                                         th:text="${cupom.codigo + ' - R$ ' + #numbers.formatDecimal(cupom.valor, 1, 'POINT', 2, 'COMMA') + ' (' + cupom.descricao + ')'}"

@@ -6,7 +6,7 @@ com/studiomuda/estoque/config/SecurityConfig.class
 com/studiomuda/estoque/model/MovimentacaoEstoque.class
 com/studiomuda/estoque/model/Cliente.class
 com/studiomuda/estoque/model/Produto.class
-com/studiomuda/estoque/model/ItemPedido.class
 com/studiomuda/estoque/model/Cupom.class
+com/studiomuda/estoque/model/ItemPedido.class
 com/studiomuda/estoque/controller/HomeController.class
 com/studiomuda/estoque/model/Funcionario.class
