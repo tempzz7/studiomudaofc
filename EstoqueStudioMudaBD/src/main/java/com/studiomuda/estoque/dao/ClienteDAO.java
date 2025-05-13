@@ -10,8 +10,8 @@ import java.util.List;
 public class ClienteDAO {
 
     public void inserir(Cliente c) throws SQLException {
-        String sql = "INSERT INTO cliente (nome, cpf_cnpj, telefone, email, cep, rua, numero, bairro, cidade, estado, tipo, ativo) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cliente (nome, cpf_cnpj, telefone, email, cep, rua, numero, bairro, cidade, estado, tipo, ativo, data_nascimento) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = Conexao.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -28,6 +28,7 @@ public class ClienteDAO {
             stmt.setString(10, c.getEstado());
             stmt.setString(11, c.getTipo());
             stmt.setBoolean(12, c.isAtivo());
+            stmt.setDate(13, c.getDataNascimento() != null ? java.sql.Date.valueOf(c.getDataNascimento()) : null);
 
             stmt.executeUpdate();
         }
@@ -36,7 +37,7 @@ public class ClienteDAO {
     public Cliente buscarPorId(int id) throws SQLException {
         String sql = "SELECT * FROM cliente WHERE id = ?";
         try (Connection conn = Conexao.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -55,8 +56,8 @@ public class ClienteDAO {
                         rs.getString("bairro"),
                         rs.getString("cidade"),
                         rs.getString("estado"),
-                        rs.getBoolean("ativo")
-                );
+                        rs.getBoolean("ativo"),
+                        rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null);
             }
         }
         return null;
@@ -65,7 +66,7 @@ public class ClienteDAO {
     public Cliente buscarPorCpfCnpj(String cpfCnpj) throws SQLException {
         String sql = "SELECT * FROM cliente WHERE cpf_cnpj = ?";
         try (Connection conn = Conexao.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, cpfCnpj);
             ResultSet rs = stmt.executeQuery();
@@ -84,17 +85,17 @@ public class ClienteDAO {
                         rs.getString("bairro"),
                         rs.getString("cidade"),
                         rs.getString("estado"),
-                        rs.getBoolean("ativo")
-                );
+                        rs.getBoolean("ativo"),
+                        rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null);
             }
         }
         return null;
     }
 
     public void atualizar(Cliente c) throws SQLException {
-        String sql = "UPDATE cliente SET nome = ?, telefone = ?, email = ?, cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, tipo = ?, ativo = ? WHERE id = ?";
+        String sql = "UPDATE cliente SET nome = ?, telefone = ?, email = ?, cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, tipo = ?, ativo = ?, data_nascimento = ? WHERE id = ?";
         try (Connection conn = Conexao.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, c.getNome());
             stmt.setString(2, c.getTelefone());
@@ -107,7 +108,8 @@ public class ClienteDAO {
             stmt.setString(9, c.getEstado());
             stmt.setString(10, c.getTipo());
             stmt.setBoolean(11, c.isAtivo());
-            stmt.setInt(12, c.getId());
+            stmt.setDate(12, c.getDataNascimento() != null ? java.sql.Date.valueOf(c.getDataNascimento()) : null);
+            stmt.setInt(13, c.getId());
 
             stmt.executeUpdate();
         }
@@ -116,7 +118,7 @@ public class ClienteDAO {
     public void deletar(int id) throws SQLException {
         String sql = "UPDATE cliente SET ativo = false WHERE id = ?";
         try (Connection conn = Conexao.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -127,8 +129,8 @@ public class ClienteDAO {
         List<Cliente> lista = new ArrayList<>();
         String sql = "SELECT * FROM cliente";
         try (Connection conn = Conexao.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Cliente c = new Cliente(
@@ -144,8 +146,8 @@ public class ClienteDAO {
                         rs.getString("bairro"),
                         rs.getString("cidade"),
                         rs.getString("estado"),
-                        rs.getBoolean("ativo")
-                );
+                        rs.getBoolean("ativo"),
+                        rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null);
                 lista.add(c);
             }
         }
@@ -165,7 +167,7 @@ public class ClienteDAO {
         List<Cliente> lista = new ArrayList<>();
         String sql = "SELECT * FROM cliente WHERE ativo = ?";
         try (Connection conn = Conexao.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setBoolean(1, ativo);
             ResultSet rs = stmt.executeQuery();
@@ -184,8 +186,8 @@ public class ClienteDAO {
                         rs.getString("bairro"),
                         rs.getString("cidade"),
                         rs.getString("estado"),
-                        rs.getBoolean("ativo")
-                );
+                        rs.getBoolean("ativo"),
+                        rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null);
                 lista.add(c);
             }
         }

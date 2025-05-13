@@ -1,5 +1,7 @@
 package com.studiomuda.estoque.model;
 
+import java.time.LocalDate;
+
 public class Cliente {
     private int id;
     private String nome;
@@ -14,12 +16,14 @@ public class Cliente {
     private String cidade;
     private String estado;
     private boolean ativo;
+    private LocalDate dataNascimento;
 
-    public Cliente() {}
+    public Cliente() {
+    }
 
     public Cliente(int id, String nome, String cpfCnpj, String telefone, String email, String tipo,
-                   String cep, String rua, String numero, String bairro, String cidade, String estado,
-                   boolean ativo) {
+            String cep, String rua, String numero, String bairro, String cidade, String estado,
+            boolean ativo, LocalDate dataNascimento) {
         this.id = id;
         this.nome = nome;
         this.cpfCnpj = cpfCnpj;
@@ -33,47 +37,127 @@ public class Cliente {
         this.cidade = cidade;
         this.estado = estado;
         this.ativo = ativo;
+        this.dataNascimento = dataNascimento;
+    }
+
+    public Cliente(int int1, String string, String string2, String string3, String string4, String string5,
+            String string6, String string7, String string8, String string9, String string10, String string11,
+            boolean boolean1, Object object) {
+        // TODO Auto-generated constructor stub
     }
 
     // Getters e Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getCpfCnpj() { return cpfCnpj; }
-    public void setCpfCnpj(String cpfCnpj) { this.cpfCnpj = cpfCnpj; }
+    public String getNome() {
+        return nome;
+    }
 
-    public String getTelefone() { return telefone; }
-    public void setTelefone(String telefone) { this.telefone = telefone; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getCpfCnpj() {
+        return cpfCnpj;
+    }
 
-    public String getTipo() { return tipo; }
-    public void setTipo(String tipo) { this.tipo = tipo; }
+    public void setCpfCnpj(String cpfCnpj) {
+        this.cpfCnpj = cpfCnpj;
+    }
 
-    public String getCep() { return cep; }
-    public void setCep(String cep) { this.cep = cep; }
+    public String getTelefone() {
+        return telefone;
+    }
 
-    public String getRua() { return rua; }
-    public void setRua(String rua) { this.rua = rua; }
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
 
-    public String getNumero() { return numero; }
-    public void setNumero(String numero) { this.numero = numero; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getBairro() { return bairro; }
-    public void setBairro(String bairro) { this.bairro = bairro; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getCidade() { return cidade; }
-    public void setCidade(String cidade) { this.cidade = cidade; }
+    public String getTipo() {
+        return tipo;
+    }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
-    public boolean isAtivo() { return ativo; }
-    public void setAtivo(boolean ativo) { this.ativo = ativo; }
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
 
     @Override
     public String toString() {
