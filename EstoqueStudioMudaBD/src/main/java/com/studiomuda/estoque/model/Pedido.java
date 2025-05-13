@@ -8,14 +8,22 @@ public class Pedido {
     private Date dataEntrega;
     private int clienteId;
     private String clienteNome; // Campo auxiliar para exibição
+    private int cupomId; // ID do cupom de desconto
+    private int funcionarioId; // ID do funcionário que realizou a venda
+    private String funcionarioNome; // Campo auxiliar para exibição
+    private String funcionarioCargo; // Campo auxiliar para exibição
+    private double valorDesconto; // Valor do desconto aplicado pelo cupom
 
     public Pedido() {}
 
-    public Pedido(int id, Date dataRequisicao, Date dataEntrega, int clienteId) {
+    public Pedido(int id, Date dataRequisicao, Date dataEntrega, int clienteId, int cupomId, int funcionarioId, double valorDesconto) {
         this.id = id;
         this.dataRequisicao = dataRequisicao;
         this.dataEntrega = dataEntrega;
         this.clienteId = clienteId;
+        this.cupomId = cupomId;
+        this.funcionarioId = funcionarioId;
+        this.valorDesconto = valorDesconto;
     }
 
     public int getId() {
@@ -57,12 +65,54 @@ public class Pedido {
     public void setClienteNome(String clienteNome) {
         this.clienteNome = clienteNome;
     }
+    
+    public int getCupomId() {
+        return cupomId;
+    }
+
+    public void setCupomId(int cupomId) {
+        this.cupomId = cupomId;
+    }
+
+    public int getFuncionarioId() {
+        return funcionarioId;
+    }
+
+    public void setFuncionarioId(int funcionarioId) {
+        this.funcionarioId = funcionarioId;
+    }
+
+    public String getFuncionarioNome() {
+        return funcionarioNome;
+    }
+
+    public void setFuncionarioNome(String funcionarioNome) {
+        this.funcionarioNome = funcionarioNome;
+    }
+    
+    public String getFuncionarioCargo() {
+        return funcionarioCargo;
+    }
+
+    public void setFuncionarioCargo(String funcionarioCargo) {
+        this.funcionarioCargo = funcionarioCargo;
+    }
+    
+    public double getValorDesconto() {
+        return valorDesconto;
+    }
+
+    public void setValorDesconto(double valorDesconto) {
+        this.valorDesconto = valorDesconto;
+    }
 
     @Override
     public String toString() {
         return "Pedido #" + id +
-                " | Requisiu00e7u00e3o: " + dataRequisicao +
+                " | Requisição: " + dataRequisicao +
                 " | Entrega: " + dataEntrega +
-                " | Cliente ID: " + clienteId;
+                " | Cliente ID: " + clienteId +
+                " | Funcionário ID: " + funcionarioId +
+                " | Cupom ID: " + cupomId;
     }
 }

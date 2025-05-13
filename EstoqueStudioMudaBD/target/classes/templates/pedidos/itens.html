@@ -18,14 +18,22 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <p><strong>Cliente:</strong> <span th:text="${pedido.clienteNome}"></span></p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        <p><strong>Funcionário:</strong> <span th:text="${pedido.funcionarioNome != null ? pedido.funcionarioNome + ' (' + pedido.funcionarioCargo + ')' : 'Não definido'}"></span></p>
+                    </div>
+                    <div class="col-md-3">
                         <p><strong>Data Requisição:</strong> <span th:text="${#dates.format(pedido.dataRequisicao, 'dd/MM/yyyy')}"></span></p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <p><strong>Data Entrega:</strong> <span th:text="${pedido.dataEntrega != null ? #dates.format(pedido.dataEntrega, 'dd/MM/yyyy') : 'Não definida'}"></span></p>
+                    </div>
+                </div>
+                <div class="row" th:if="${pedido.cupomId > 0}">
+                    <div class="col-md-12">
+                        <p class="text-success"><strong>Cupom aplicado:</strong> <span th:text="'Desconto de R$ ' + ${#numbers.formatDecimal(pedido.valorDesconto, 1, 'POINT', 2, 'COMMA')}"></span></p>
                     </div>
                 </div>
             </div>
@@ -36,6 +44,12 @@
                 <h5 class="mb-0">Adicionar Item</h5>
             </div>
             <div class="card-body">
+                <div th:if="${mensagemErro}" class="alert alert-danger mb-3">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> <span th:text="${mensagemErro}"></span>
+                </div>
+                <div th:if="${param.erro}" class="alert alert-danger mb-3">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> <span th:text="${param.erro}"></span>
+                </div>
                 <form th:action="@{/pedidos/itens/adicionar}" th:object="${novoItem}" method="post">
                     <input type="hidden" name="id" th:value="${novoItem.id}">
                     <input type="hidden" name="pedidoId" th:value="${pedido.id}">
@@ -52,7 +66,8 @@
                         </div>
                         <div class="col-md-4">
                             <label for="quantidade" class="form-label">Quantidade</label>
-                            <input type="number" class="form-control" id="quantidade" name="quantidade" th:value="${novoItem.quantidade}" min="1" required>
+                            <input type="number" class="form-control" id="quantidade" name="quantidade" th:value="${novoItem.quantidade}" min="1" max="999" required>
+                            <small class="text-muted">Verifique o estoque disponível antes de adicionar.</small>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
                             <button type="submit" class="btn btn-success w-100">
@@ -100,9 +115,17 @@
                             </tr>
                         </tbody>
                         <tfoot>
+                            <tr th:if="${pedido.valorDesconto > 0}" class="table-secondary">
+                                <td colspan="4" class="text-end"><strong>Subtotal:</strong></td>
+                                <td colspan="2"><span th:text="${'R$ ' + #numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}"></span></td>
+                            </tr>
+                            <tr th:if="${pedido.valorDesconto > 0}" class="table-success">
+                                <td colspan="4" class="text-end text-success"><strong>Desconto aplicado:</strong></td>
+                                <td colspan="2" class="text-success"><span th:text="${'- R$ ' + #numbers.formatDecimal(pedido.valorDesconto, 1, 'POINT', 2, 'COMMA')}"></span></td>
+                            </tr>
                             <tr class="table-dark">
                                 <td colspan="4" class="text-end"><strong>Total:</strong></td>
-                                <td colspan="2"><strong th:text="${'R$ ' + #numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}"></strong></td>
+                                <td colspan="2"><strong th:text="${pedido.valorDesconto > 0 ? 'R$ ' + #numbers.formatDecimal(valorComDesconto, 1, 'POINT', 2, 'COMMA') : 'R$ ' + #numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}"></strong></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -113,5 +136,57 @@
     
     <div th:replace="layout :: footer"></div>
     <div th:replace="layout :: scripts"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const produtoSelect = document.getElementById('produtoId');
+            const quantidadeInput = document.getElementById('quantidade');
+            const estoqueMensagem = document.createElement('div');
+            estoqueMensagem.className = 'mt-2 small';
+            
+            if (produtoSelect && quantidadeInput) {
+                // Inserir o elemento para mostrar o estoque disponível
+                quantidadeInput.parentNode.appendChild(estoqueMensagem);
+                
+                // Função para buscar e mostrar o estoque disponível
+                produtoSelect.addEventListener('change', function() {
+                    const produtoId = this.value;
+                    if (!produtoId) {
+                        estoqueMensagem.textContent = '';
+                        return;
+                    }
+                    
+                    // Buscar produto via API
+                    fetch(`/produtos/api/${produtoId}`)
+                        .then(response => response.json())
+                        .then(produto => {
+                            estoqueMensagem.textContent = `Estoque disponível: ${produto.quantidade} unidades`;
+                            estoqueMensagem.className = 'mt-2 small text-info';
+                            
+                            // Atualizar o máximo permitido no input de quantidade
+                            quantidadeInput.setAttribute('max', produto.quantidade);
+                            
+                            // Se o valor atual for maior que o estoque, ajustar e mostrar aviso
+                            if (parseInt(quantidadeInput.value) > produto.quantidade) {
+                                quantidadeInput.value = produto.quantidade;
+                                estoqueMensagem.textContent = `⚠️ Quantidade ajustada para o máximo disponível: ${produto.quantidade}`;
+                                estoqueMensagem.className = 'mt-2 small text-warning fw-bold';
+                            } else if (produto.quantidade <= 3) {
+                                estoqueMensagem.textContent = `⚠️ Estoque baixo! Disponível: ${produto.quantidade} unidades`;
+                                estoqueMensagem.className = 'mt-2 small text-warning fw-bold';
+                            } else {
+                                estoqueMensagem.textContent = `Estoque disponível: ${produto.quantidade} unidades`;
+                                estoqueMensagem.className = 'mt-2 small text-info';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro ao buscar produto:', error);
+                            estoqueMensagem.textContent = 'Erro ao verificar estoque disponível';
+                            estoqueMensagem.className = 'mt-2 small text-danger';
+                        });
+                });
+            }
+        });
+    </script>
 </body>
 </html>

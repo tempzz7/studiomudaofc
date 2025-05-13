@@ -70,6 +70,26 @@ public class EstoqueController {
     public String excluirMovimentacao(@PathVariable("id") int id) {
         try {
             System.out.println("Tentando excluir movimentação ID: " + id);
+            
+            // Verificar se a movimentação existe
+            MovimentacaoEstoque movimentacao = movimentacaoDAO.buscarPorId(id);
+            if (movimentacao == null) {
+                return "redirect:/erro?mensagem=Movimentação não encontrada";
+            }
+            
+            // Verificar se a exclusão de uma entrada causará estoque negativo
+            if (movimentacao.getTipo().equalsIgnoreCase("entrada")) {
+                // Buscar o produto para verificar o estoque atual
+                int produtoId = movimentacao.getIdProduto();
+                int quantidadeMovimentada = movimentacao.getQuantidade();
+                
+                // Verificar se o estoque ficará negativo após o estorno
+                int estoqueAtual = produtoDAO.buscarPorId(produtoId).getQuantidade();
+                if (estoqueAtual < quantidadeMovimentada) {
+                    return "redirect:/erro?mensagem=Não é possível excluir esta movimentação pois resultaria em estoque negativo. Estoque atual: " + estoqueAtual;
+                }
+            }
+            
             movimentacaoDAO.deletar(id);
             System.out.println("Movimentação excluída com sucesso!");
             return "redirect:/estoque";

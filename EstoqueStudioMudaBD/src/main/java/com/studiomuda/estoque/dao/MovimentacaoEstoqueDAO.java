@@ -109,19 +109,43 @@ public class MovimentacaoEstoqueDAO {
     }
 
     public void deletar(int id) throws SQLException {
-        String sql = "DELETE FROM movimentacao_estoque WHERE id = ?";
+        // Primeiro, buscar a movimentação para obter informações necessárias para o estorno
+        MovimentacaoEstoque movimentacao = buscarPorId(id);
+        if (movimentacao == null) {
+            throw new SQLException("Nenhuma movimentação encontrada com o ID: " + id);
+        }
+        
+        String sqlDelete = "DELETE FROM movimentacao_estoque WHERE id = ?";
+        String sqlEstorno = "UPDATE produto SET quantidade = quantidade - ? WHERE id = ?";
         
         try (Connection conn = Conexao.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmtDelete = conn.prepareStatement(sqlDelete);
+             PreparedStatement stmtEstorno = conn.prepareStatement(sqlEstorno)) {
             
-            stmt.setInt(1, id);
-            int rowsAffected = stmt.executeUpdate();
+            conn.setAutoCommit(false);
             
-            if (rowsAffected == 0) {
-                throw new SQLException("Nenhuma movimentação encontrada com o ID: " + id);
+            // Calcular o valor a reverter no estoque (negativo da operação original)
+            int fator = movimentacao.getTipo().equalsIgnoreCase("saida") ? -1 : 1;
+            int valorReverter = fator * movimentacao.getQuantidade();
+            
+            // Aplicar o estorno no estoque
+            stmtEstorno.setInt(1, valorReverter);
+            stmtEstorno.setInt(2, movimentacao.getIdProduto());
+            stmtEstorno.executeUpdate();
+            
+            // Excluir a movimentação
+            stmtDelete.setInt(1, id);
+            stmtDelete.executeUpdate();
+            
+            conn.commit();
+            System.out.println("Movimentação excluída com sucesso e estoque ajustado! ID: " + id);
+        } catch (SQLException e) {
+            try (Connection conn = Conexao.getConnection()) {
+                conn.rollback();
+            } catch (SQLException ex) {
+                throw new SQLException("Erro ao fazer rollback: " + ex.getMessage());
             }
-            
-            System.out.println("Movimentação excluída com sucesso! ID: " + id);
+            throw e;
         }
     }
 }

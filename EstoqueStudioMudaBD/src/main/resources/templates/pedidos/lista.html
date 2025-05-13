@@ -22,8 +22,10 @@
                     <tr>
                         <th>ID</th>
                         <th>Cliente</th>
+                        <th>Funcionário</th>
                         <th>Data Requisição</th>
                         <th>Data Entrega</th>
+                        <th>Cupom</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -31,8 +33,13 @@
                     <tr th:each="pedido : ${pedidos}">
                         <td th:text="${pedido.id}"></td>
                         <td th:text="${pedido.clienteNome}"></td>
+                        <td th:text="${pedido.funcionarioNome != null ? pedido.funcionarioNome : 'Não definido'}"></td>
                         <td th:text="${#dates.format(pedido.dataRequisicao, 'dd/MM/yyyy')}"></td>
                         <td th:text="${pedido.dataEntrega != null ? #dates.format(pedido.dataEntrega, 'dd/MM/yyyy') : 'Não definida'}"></td>
+                        <td>
+                            <span th:if="${pedido.valorDesconto > 0}" class="badge bg-success" th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorDesconto, 1, 'POINT', 2, 'COMMA')}"></span>
+                            <span th:unless="${pedido.valorDesconto > 0}" class="text-muted">Sem cupom</span>
+                        </td>
                         <td>
                             <div class="btn-group btn-group-sm">
                                 <a th:href="@{/pedidos/itens/{id}(id=${pedido.id})}" class="btn btn-info">

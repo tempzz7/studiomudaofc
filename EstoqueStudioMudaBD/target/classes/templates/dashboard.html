@@ -7,45 +7,119 @@
 <div th:replace="layout :: menu"></div>
 <div class="container mt-4">
     <h2>Dashboard</h2>
-    <div class="row">        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">Top 10 Itens Mais Vendidos</div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Quantidade Vendida</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="item : ${topProdutos}">
-                            <td th:text="${item.produtoNome}"></td>
-                            <td th:text="${item.quantidadeVendida}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+
+    <!-- Filtro por categoria -->
+    <form id="form-categoria" class="mb-4">
+        <div class="form-row align-items-center">
+            <div class="col-auto">
+                <label for="categoria" class="col-form-label">Categoria:</label>
+            </div>
+            <div class="col-auto">
+                <select id="categoria" name="categoria" class="form-control">
+                    <option value="">Selecione...</option>
+                    <option value="clientes">Top clientes</option>
+                    <option value="cidades">Top cidade</option>
+                    <option value="faixa">Top Faixa etária</option>
+                    <option value="itens">Top itens</option>
+                    <option value="auxiliares">Top auxiliar</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-success">Filtrar</button>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">Top 10 Clientes</div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Cliente</th>
-                            <th>Total de Pedidos</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="cliente : ${topClientes}">
-                            <td th:text="${cliente.nome}"></td>
-                            <td th:text="${cliente.totalPedidos}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
+    </form>
+
+    <div id="cards-dashboard">
+        <div class="row">
+            <!-- Top 10 Clientes -->
+            <div class="col-md-6" id="card-clientes" style="display:none;">
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">Top 10 Clientes</div>
+                    <div class="card-body">
+                        <canvas id="clientesChart" height="180"></canvas>
+                        <table class="table table-striped mt-3">
+                            <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Total de Pedidos</th>
+                            </tr>
+                            </thead>
+                            <tbody id="clientes-tabela-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Cidade que vende mais -->
+            <div class="col-md-6" id="card-cidades" style="display:none;">
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">Cidades com Mais Vendas</div>
+                    <div class="card-body">
+                        <canvas id="cidadesChart" height="180"></canvas>
+                        <table class="table table-striped mt-3">
+                            <thead>
+                            <tr>
+                                <th>Cidade</th>
+                                <th>Vendas</th>
+                            </tr>
+                            </thead>
+                            <tbody id="cidades-tabela-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Faixa etária que vende mais -->
+            <div class="col-md-6" id="card-faixa" style="display:none;">
+                <div class="card mb-4">
+                    <div class="card-header bg-warning text-dark">Faixa Etária com Mais Compras</div>
+                    <div class="card-body">
+                        <canvas id="faixaEtariaChart" height="180"></canvas>
+                        <table class="table table-striped mt-3">
+                            <thead>
+                            <tr>
+                                <th>Faixa Etária</th>
+                                <th>Vendas</th>
+                            </tr>
+                            </thead>
+                            <tbody id="faixa-tabela-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Top 10 Itens -->
+            <div class="col-md-6" id="card-itens" style="display:none;">
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">Top 10 Itens Mais Vendidos</div>
+                    <div class="card-body">
+                        <canvas id="produtosChart" height="180"></canvas>
+                        <table class="table table-striped mt-3">
+                            <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Quantidade Vendida</th>
+                            </tr>
+                            </thead>
+                            <tbody id="produtos-tabela-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Auxiliar que vendeu mais -->
+            <div class="col-md-6" id="card-auxiliares" style="display:none;">
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white">Auxiliar que Mais Vendeu</div>
+                    <div class="card-body">
+                        <canvas id="auxiliaresChart" height="180"></canvas>
+                        <table class="table table-striped mt-3">
+                            <thead>
+                            <tr>
+                                <th>Auxiliar</th>
+                                <th>Vendas</th>
+                            </tr>
+                            </thead>
+                            <tbody id="auxiliares-tabela-body"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,5 +127,189 @@
 </div>
 <div th:replace="layout :: footer"></div>
 <div th:replace="layout :: scripts"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+function renderChart(ctx, labels, dados, label, color) {
+    return new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: label,
+                data: dados,
+                backgroundColor: color
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+
+function atualizarClientes() {
+    fetch('/dashboard/top-clientes')
+        .then(r => r.json())
+        .then(clientes => {
+            if (!clientes || clientes.length === 0) {
+                clientes = [
+                    {nome: "Cliente Exemplo 1", totalPedidos: 0},
+                    {nome: "Cliente Exemplo 2", totalPedidos: 0},
+                    {nome: "Cliente Exemplo 3", totalPedidos: 0}
+                ];
+            }
+            const labels = clientes.map(c => c.nome);
+            const dados = clientes.map(c => c.totalPedidos);
+            const ctx = document.getElementById('clientesChart').getContext('2d');
+            renderChart(ctx, labels, dados, 'Total de Pedidos', 'rgba(54, 162, 235, 0.5)');
+            const tabela = document.getElementById('clientes-tabela-body');
+            tabela.innerHTML = '';
+            clientes.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${c.nome}</td><td>${c.totalPedidos}</td>`;
+                tabela.appendChild(tr);
+            });
+        });
+}
+
+function atualizarCidades() {
+    fetch('/dashboard/top-cidades')
+        .then(r => r.json())
+        .then(cidades => {
+            if (!cidades || cidades.length === 0) {
+                cidades = [
+                    {cidade: "Cidade Exemplo 1", vendas: 0},
+                    {cidade: "Cidade Exemplo 2", vendas: 0},
+                    {cidade: "Cidade Exemplo 3", vendas: 0}
+                ];
+            }
+            const labels = cidades.map(c => c.cidade);
+            const dados = cidades.map(c => c.vendas);
+            const ctx = document.getElementById('cidadesChart').getContext('2d');
+            renderChart(ctx, labels, dados, 'Vendas', 'rgba(255, 206, 86, 0.5)');
+            const tabela = document.getElementById('cidades-tabela-body');
+            tabela.innerHTML = '';
+            cidades.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${c.cidade}</td><td>${c.vendas}</td>`;
+                tabela.appendChild(tr);
+            });
+        });
+}
+
+function atualizarFaixaEtaria() {
+    fetch('/dashboard/top-faixa-etaria')
+        .then(r => r.json())
+        .then(faixas => {
+            if (!faixas || faixas.length === 0) {
+                faixas = [
+                    {faixa: "18-25", vendas: 0},
+                    {faixa: "26-35", vendas: 0},
+                    {faixa: "36-45", vendas: 0}
+                ];
+            }
+            const labels = faixas.map(f => f.faixa);
+            const dados = faixas.map(f => f.vendas);
+            const ctx = document.getElementById('faixaEtariaChart').getContext('2d');
+            renderChart(ctx, labels, dados, 'Vendas', 'rgba(153, 102, 255, 0.5)');
+            const tabela = document.getElementById('faixa-tabela-body');
+            tabela.innerHTML = '';
+            faixas.forEach(f => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${f.faixa}</td><td>${f.vendas}</td>`;
+                tabela.appendChild(tr);
+            });
+        });
+}
+
+function atualizarProdutos() {
+    fetch('/dashboard/top-produtos')
+        .then(r => r.json())
+        .then(produtos => {
+            if (!produtos || produtos.length === 0) {
+                produtos = [
+                    {produtoNome: "Exemplo 1", quantidadeVendida: 0},
+                    {produtoNome: "Exemplo 2", quantidadeVendida: 0},
+                    {produtoNome: "Exemplo 3", quantidadeVendida: 0}
+                ];
+            }
+            const labels = produtos.map(p => p.produtoNome);
+            const dados = produtos.map(p => p.quantidadeVendida);
+            const ctx = document.getElementById('produtosChart').getContext('2d');
+            renderChart(ctx, labels, dados, 'Quantidade Vendida', 'rgba(75, 192, 192, 0.5)');
+            const tabela = document.getElementById('produtos-tabela-body');
+            tabela.innerHTML = '';
+            produtos.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${p.produtoNome}</td><td>${p.quantidadeVendida}</td>`;
+                tabela.appendChild(tr);
+            });
+        });
+}
+
+function atualizarAuxiliares() {
+    fetch('/dashboard/top-auxiliares')
+        .then(r => r.json())
+        .then(auxiliares => {
+            if (!auxiliares || auxiliares.length === 0) {
+                auxiliares = [
+                    {auxiliar: "Auxiliar Exemplo 1", vendas: 0},
+                    {auxiliar: "Auxiliar Exemplo 2", vendas: 0},
+                    {auxiliar: "Auxiliar Exemplo 3", vendas: 0}
+                ];
+            }
+            const labels = auxiliares.map(a => a.auxiliar);
+            const dados = auxiliares.map(a => a.vendas);
+            const ctx = document.getElementById('auxiliaresChart').getContext('2d');
+            renderChart(ctx, labels, dados, 'Vendas', 'rgba(255, 99, 132, 0.5)');
+            const tabela = document.getElementById('auxiliares-tabela-body');
+            tabela.innerHTML = '';
+            auxiliares.forEach(a => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${a.auxiliar}</td><td>${a.vendas}</td>`;
+                tabela.appendChild(tr);
+            });
+        });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Esconde todos os cards ao carregar
+    document.querySelectorAll('.card').forEach(card => card.parentElement.style.display = 'none');
+    
+    // Mostra o card de itens por padrão ao carregar a página
+    document.getElementById('card-itens').style.display = '';
+    atualizarProdutos();
+    
+    // Seleciona o valor correspondente no dropdown
+    document.getElementById('categoria').value = 'itens';
+
+    document.getElementById('form-categoria').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const categoria = document.getElementById('categoria').value;
+
+        // Esconde todos os cards
+        document.querySelectorAll('.card').forEach(card => card.parentElement.style.display = 'none');
+
+        // Mostra e atualiza só o card selecionado
+        if (categoria === "clientes") {
+            document.getElementById('card-clientes').style.display = '';
+            atualizarClientes();
+        } else if (categoria === "cidades") {
+            document.getElementById('card-cidades').style.display = '';
+            atualizarCidades();
+        } else if (categoria === "faixa") {
+            document.getElementById('card-faixa').style.display = '';
+            atualizarFaixaEtaria();
+        } else if (categoria === "itens") {
+            document.getElementById('card-itens').style.display = '';
+            atualizarProdutos();
+        } else if (categoria === "auxiliares") {
+            document.getElementById('card-auxiliares').style.display = '';
+            atualizarAuxiliares();
+        }
+    });
+});
+</script>
 </body>
 </html>

@@ -20,7 +20,18 @@
                                 <option value="">Selecione um cliente</option>
                                 <option th:each="cliente : ${clientes}" 
                                         th:value="${cliente.id}" 
-                                        th:text="${cliente.nome}"></option>
+                                        th:text="${cliente.nome}"
+                                        th:selected="${cliente.id == pedido.clienteId}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="funcionarioId" class="form-label">Funcionário Responsável</label>
+                            <select class="form-select" id="funcionarioId" name="funcionarioId" required>
+                                <option value="">Selecione o funcionário</option>
+                                <option th:each="funcionario : ${funcionarios}" 
+                                        th:value="${funcionario.id}" 
+                                        th:text="${funcionario.nome + ' (' + funcionario.cargo + ')'}"
+                                        th:selected="${funcionario.id == pedido.funcionarioId}"></option>
                             </select>
                         </div>
                     </div>
@@ -33,6 +44,21 @@
                         <div class="col-md-6">
                             <label for="dataEntrega" class="form-label">Data de Entrega</label>
                             <input type="date" class="form-control" id="dataEntrega" name="dataEntregaStr" th:value="${pedido.dataEntrega != null ? #dates.format(pedido.dataEntrega, 'yyyy-MM-dd') : ''}">
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="cupomId" class="form-label">Cupom de Desconto</label>
+                            <select class="form-select" id="cupomId" name="cupomId">
+                                <option value="">Sem cupom</option>
+                                <option th:each="cupom : ${cupons}" 
+                                        th:value="${cupom.id}" 
+                                        th:text="${cupom.codigo + ' - R$ ' + #numbers.formatDecimal(cupom.valor, 1, 'POINT', 2, 'COMMA') + ' (' + cupom.descricao + ')'}"
+                                        th:selected="${cupom.id == pedido.cupomId}"
+                                        th:disabled="${!cupom.valido}"></option>
+                            </select>
+                            <small class="text-muted">Os cupons com desconto sem validade ou vencidos estão desabilitados</small>
                         </div>
                     </div>
                     

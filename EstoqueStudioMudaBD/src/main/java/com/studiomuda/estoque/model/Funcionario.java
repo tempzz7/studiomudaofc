@@ -89,10 +89,10 @@ public class Funcionario {
                 " | Nasc: " + data_nasc +
                 " | Tel: " + telefoneFormatado +
                 " | Rua: " + rua +
-                " | Nu00ba: " + numero +
+                " | Número: " + numero +
                 " | Bairro: " + bairro +
                 " | Cidade: " + cidade +
                 " | UF: " + estado +
-                " | Ativo: " + (ativo ? "Sim" : "Nu00e3o");
+                " | Ativo: " + (ativo ? "Sim" : "Não");
     }
 }

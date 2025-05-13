@@ -10,13 +10,29 @@ import java.util.List;
 public class PedidoDAO {
 
     public void inserir(Pedido pedido) throws SQLException {
-        String sql = "INSERT INTO pedido (data_requisicao, data_entrega, cliente_id) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO pedido (data_requisicao, data_entrega, cliente_id, funcionario_id, cupom_id, valor_desconto) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = Conexao.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setDate(1, pedido.getDataRequisicao());
             stmt.setDate(2, pedido.getDataEntrega());
             stmt.setInt(3, pedido.getClienteId());
+            
+            // Lidar com valores que podem ser zero (não definidos)
+            if (pedido.getFuncionarioId() > 0) {
+                stmt.setInt(4, pedido.getFuncionarioId());
+            } else {
+                stmt.setNull(4, java.sql.Types.INTEGER);
+            }
+            
+            if (pedido.getCupomId() > 0) {
+                stmt.setInt(5, pedido.getCupomId());
+                stmt.setDouble(6, pedido.getValorDesconto());
+            } else {
+                stmt.setNull(5, java.sql.Types.INTEGER);
+                stmt.setDouble(6, 0.0);
+            }
+            
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
@@ -28,8 +44,10 @@ public class PedidoDAO {
 
     public List<Pedido> listar() throws SQLException {
         List<Pedido> lista = new ArrayList<>();
-        String sql = "SELECT p.*, c.nome as cliente_nome FROM pedido p " +
-                     "LEFT JOIN cliente c ON p.cliente_id = c.id";
+        String sql = "SELECT p.*, c.nome as cliente_nome, f.nome as funcionario_nome, f.cargo as funcionario_cargo " +
+                     "FROM pedido p " +
+                     "LEFT JOIN cliente c ON p.cliente_id = c.id " +
+                     "LEFT JOIN funcionario f ON p.funcionario_id = f.id";
 
         try (Connection conn = Conexao.getConnection();
              Statement stmt = conn.createStatement();
@@ -40,9 +58,14 @@ public class PedidoDAO {
                         rs.getInt("id"),
                         rs.getDate("data_requisicao"),
                         rs.getDate("data_entrega"),
-                        rs.getInt("cliente_id")
+                        rs.getInt("cliente_id"),
+                        rs.getInt("cupom_id"),
+                        rs.getInt("funcionario_id"),
+                        rs.getDouble("valor_desconto")
                 );
                 p.setClienteNome(rs.getString("cliente_nome"));
+                p.setFuncionarioNome(rs.getString("funcionario_nome"));
+                p.setFuncionarioCargo(rs.getString("funcionario_cargo"));
                 lista.add(p);
             }
         }
@@ -50,8 +73,10 @@ public class PedidoDAO {
     }
 
     public Pedido buscarPorId(int id) throws SQLException {
-        String sql = "SELECT p.*, c.nome as cliente_nome FROM pedido p " +
+        String sql = "SELECT p.*, c.nome as cliente_nome, f.nome as funcionario_nome, f.cargo as funcionario_cargo " +
+                     "FROM pedido p " +
                      "LEFT JOIN cliente c ON p.cliente_id = c.id " +
+                     "LEFT JOIN funcionario f ON p.funcionario_id = f.id " +
                      "WHERE p.id = ?";
         try (Connection conn = Conexao.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -63,9 +88,14 @@ public class PedidoDAO {
                         rs.getInt("id"),
                         rs.getDate("data_requisicao"),
                         rs.getDate("data_entrega"),
-                        rs.getInt("cliente_id")
+                        rs.getInt("cliente_id"),
+                        rs.getInt("cupom_id"),
+                        rs.getInt("funcionario_id"),
+                        rs.getDouble("valor_desconto")
                 );
                 p.setClienteNome(rs.getString("cliente_nome"));
+                p.setFuncionarioNome(rs.getString("funcionario_nome"));
+                p.setFuncionarioCargo(rs.getString("funcionario_cargo"));
                 return p;
             }
         }
@@ -73,14 +103,30 @@ public class PedidoDAO {
     }
 
     public void atualizar(Pedido pedido) throws SQLException {
-        String sql = "UPDATE pedido SET data_requisicao = ?, data_entrega = ?, cliente_id = ? WHERE id = ?";
+        String sql = "UPDATE pedido SET data_requisicao = ?, data_entrega = ?, cliente_id = ?, funcionario_id = ?, cupom_id = ?, valor_desconto = ? WHERE id = ?";
         try (Connection conn = Conexao.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setDate(1, pedido.getDataRequisicao());
             stmt.setDate(2, pedido.getDataEntrega());
             stmt.setInt(3, pedido.getClienteId());
-            stmt.setInt(4, pedido.getId());
+            
+            // Lidar com valores que podem ser zero (não definidos)
+            if (pedido.getFuncionarioId() > 0) {
+                stmt.setInt(4, pedido.getFuncionarioId());
+            } else {
+                stmt.setNull(4, java.sql.Types.INTEGER);
+            }
+            
+            if (pedido.getCupomId() > 0) {
+                stmt.setInt(5, pedido.getCupomId());
+                stmt.setDouble(6, pedido.getValorDesconto());
+            } else {
+                stmt.setNull(5, java.sql.Types.INTEGER);
+                stmt.setDouble(6, 0.0);
+            }
+            
+            stmt.setInt(7, pedido.getId());
             stmt.executeUpdate();
         }
     }

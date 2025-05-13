@@ -47,15 +47,6 @@ CREATE TABLE cliente (
     estado VARCHAR(2)
 );
 
--- Tabela de pedidos
-CREATE TABLE pedido (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    data_requisicao DATE,                              -- Data do pedido
-    data_entrega DATE,                                 -- Data de entrega
-    itens TEXT,                                        -- Itens (legado)
-    cliente_id INT                                     -- Cliente associado
-);
-
 -- Tabela de cupons
 CREATE TABLE cupom (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -66,6 +57,24 @@ CREATE TABLE cupom (
     validade DATE,
     condicoes_uso TEXT
 );
+
+-- Tabela de pedidos
+CREATE TABLE pedido (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    data_requisicao DATE,                              -- Data do pedido
+    data_entrega DATE,                                 -- Data de entrega
+    itens TEXT,                                        -- Itens (legado)
+    cliente_id INT,                                    -- Cliente associado
+    funcionario_id INT,                                -- Funcionário associado à venda
+    cupom_id INT,                                      -- Cupom de desconto aplicado
+    valor_desconto DECIMAL(10,2) DEFAULT 0.00,         -- Valor do desconto aplicado
+    FOREIGN KEY (cupom_id) REFERENCES cupom(id),
+    FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
+);
+
+-- Criar índices para melhorar a performance das consultas em pedidos
+CREATE INDEX idx_pedido_funcionario ON pedido(funcionario_id);
+CREATE INDEX idx_pedido_cupom ON pedido(cupom_id);
 
 -- Tabela de movimentações de estoque
 CREATE TABLE movimentacao_estoque (
@@ -209,6 +218,21 @@ BEGIN
     IF OLD.email <> NEW.email THEN
         INSERT INTO historico_cliente (id_cliente, campo, valor_antigo, valor_novo)
         VALUES (OLD.id, 'email', OLD.email, NEW.email);
+    END IF;
+END$$
+DELIMITER ;
+
+-- Trigger para atualizar valor_desconto quando um cupom é alterado
+DELIMITER $$
+CREATE TRIGGER trg_atualiza_desconto_pedido
+AFTER UPDATE ON cupom
+FOR EACH ROW
+BEGIN
+    -- Atualiza o valor do desconto nos pedidos que usam este cupom se o valor do cupom foi alterado
+    IF OLD.valor <> NEW.valor THEN
+        UPDATE pedido 
+        SET valor_desconto = NEW.valor
+        WHERE cupom_id = NEW.id;
     END IF;
 END$$
 DELIMITER ;

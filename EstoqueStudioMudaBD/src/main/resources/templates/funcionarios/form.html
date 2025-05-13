@@ -28,7 +28,12 @@
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="cargo" class="form-label">Cargo</label>
-                            <input type="text" class="form-control" id="cargo" name="cargo" th:value="${funcionario.cargo}" required>
+                            <select class="form-select" id="cargo" name="cargo" required>
+                                <option value="" th:selected="${funcionario.cargo == null}">Selecione...</option>
+                                <option value="Diretor" th:selected="${funcionario.cargo == 'Diretor'}">Diretor</option>
+                                <option value="Auxiliar" th:selected="${funcionario.cargo == 'Auxiliar'}">Auxiliar</option>
+                                <option value="Estoquista" th:selected="${funcionario.cargo == 'Estoquista'}">Estoquista</option>
+                            </select>
                         </div>
                         <div class="col-md-4">
                             <label for="data_nasc" class="form-label">Data de Nascimento</label>

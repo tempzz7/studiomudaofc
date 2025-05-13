@@ -2,9 +2,15 @@ package com.studiomuda.estoque.controller;
 
 import com.studiomuda.estoque.dao.ProdutoDAO;
 import com.studiomuda.estoque.model.Produto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import java.sql.SQLException;
 
@@ -67,6 +73,36 @@ public class ProdutoController {
             return "redirect:/produtos";
         } catch (SQLException e) {
             return "redirect:/erro?mensagem=" + e.getMessage();
+        }
+    }
+
+    @GetMapping("/api")
+    @ResponseBody
+    public ResponseEntity<?> listarProdutosApi() {
+        try {
+            List<Produto> produtos = produtoDAO.listar();
+            return ResponseEntity.ok(produtos);
+        } catch (SQLException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("erro", "Erro ao listar produtos: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    @GetMapping("/api/{id}")
+    @ResponseBody
+    public ResponseEntity<?> buscarProdutoApi(@PathVariable("id") int id) {
+        try {
+            Produto produto = produtoDAO.buscarPorId(id);
+            if (produto != null) {
+                return ResponseEntity.ok(produto);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (SQLException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("erro", "Erro ao buscar produto: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
 }
