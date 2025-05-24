@@ -10,7 +10,7 @@ import java.util.List;
 public class ClienteDAO {
 
     public void inserir(Cliente c) throws SQLException {
-        String sql = "INSERT INTO cliente (nome, cpf_cnpj, telefone, email, cep, rua, numero, bairro, cidade, estado, tipo, ativo, data_nascimento) "
+        String sql = "INSERT INTO cliente (nome, cpf_cnpj, telefone, email, cep, rua, numero, bairro, cidade, estado, tipo, ativo, dataNascimento) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = Conexao.getConnection()) {
@@ -57,7 +57,7 @@ public class ClienteDAO {
                         rs.getString("cidade"),
                         rs.getString("estado"),
                         rs.getBoolean("ativo"),
-                        rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null);
+                        rs.getDate("dataNascimento") != null ? rs.getDate("dataNascimento").toLocalDate() : null);
             }
         }
         return null;
@@ -86,14 +86,14 @@ public class ClienteDAO {
                         rs.getString("cidade"),
                         rs.getString("estado"),
                         rs.getBoolean("ativo"),
-                        rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null);
+                        rs.getDate("dataNascimento") != null ? rs.getDate("dataNascimento").toLocalDate() : null);
             }
         }
         return null;
     }
 
     public void atualizar(Cliente c) throws SQLException {
-        String sql = "UPDATE cliente SET nome = ?, telefone = ?, email = ?, cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, tipo = ?, ativo = ?, data_nascimento = ? WHERE id = ?";
+        String sql = "UPDATE cliente SET nome = ?, telefone = ?, email = ?, cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, tipo = ?, ativo = ?, dataNascimento = ? WHERE id = ?";
         try (Connection conn = Conexao.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -147,7 +147,7 @@ public class ClienteDAO {
                         rs.getString("cidade"),
                         rs.getString("estado"),
                         rs.getBoolean("ativo"),
-                        rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null);
+                        rs.getDate("dataNascimento") != null ? rs.getDate("dataNascimento").toLocalDate() : null);
                 lista.add(c);
             }
         }
@@ -187,7 +187,7 @@ public class ClienteDAO {
                         rs.getString("cidade"),
                         rs.getString("estado"),
                         rs.getBoolean("ativo"),
-                        rs.getDate("data_nascimento") != null ? rs.getDate("data_nascimento").toLocalDate() : null);
+                        rs.getDate("dataNascimento") != null ? rs.getDate("dataNascimento").toLocalDate() : null);
                 lista.add(c);
             }
         }

@@ -44,9 +44,9 @@ CREATE TABLE cliente (
     numero VARCHAR(10),
     bairro VARCHAR(50),
     cidade VARCHAR(50),
-    estado VARCHAR(2)
+    estado VARCHAR(2),
+    dataNascimento DATE
 );
-ALTER TABLE cliente ADD COLUMN data_nascimento DATE;
 
 -- Tabela de cupons
 CREATE TABLE cupom (

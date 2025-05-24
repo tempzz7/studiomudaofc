@@ -174,7 +174,22 @@ public class PedidoController {
         try {
             Pedido pedido = pedidoDAO.buscarPorId(id);
             if (pedido != null) {
-                return ResponseEntity.ok(pedido);
+                // Buscar e adicionar os itens do pedido
+                List<ItemPedido> itens = itemPedidoDAO.listarPorPedido(id);
+                // Adiciona os itens como um campo dinâmico no Map para serialização
+                Map<String, Object> pedidoMap = new HashMap<>();
+                pedidoMap.put("id", pedido.getId());
+                pedidoMap.put("dataRequisicao", pedido.getDataRequisicao());
+                pedidoMap.put("dataEntrega", pedido.getDataEntrega());
+                pedidoMap.put("clienteId", pedido.getClienteId());
+                pedidoMap.put("clienteNome", pedido.getClienteNome());
+                pedidoMap.put("cupomId", pedido.getCupomId());
+                pedidoMap.put("funcionarioId", pedido.getFuncionarioId());
+                pedidoMap.put("funcionarioNome", pedido.getFuncionarioNome());
+                pedidoMap.put("funcionarioCargo", pedido.getFuncionarioCargo());
+                pedidoMap.put("valorDesconto", pedido.getValorDesconto());
+                pedidoMap.put("itens", itens);
+                return ResponseEntity.ok(pedidoMap);
             } else {
                 return ResponseEntity.notFound().build();
             }

@@ -35,12 +35,12 @@ INSERT INTO funcionario (nome, cpf, cargo, data_nasc, telefone, cep, rua, numero
 ('Roberta Lima', '32165498701', 'Auxiliar', '1987-09-22', '(11) 99444-3322', '05678-901', 'Rua das Palmeiras', '234', 'Pinheiros', 'São Paulo', 'SP', true);
 
 -- Inserir clientes para teste
-INSERT INTO cliente (nome, cpf_cnpj, telefone, email, tipo, ativo, cep, rua, numero, bairro, cidade, estado) VALUES 
-('Cláudia Silva', '11122233344', '(11) 98765-4321', 'claudia@email.com', 'PF', true, '12345-678', 'Rua do Jardim', '100', 'Jardim Paulista', 'São Paulo', 'SP'),
-('Carlos Rocha', '22233344455', '(11) 97654-3210', 'carlos@email.com', 'PF', true, '23456-789', 'Av. Comercial', '200', 'Moema', 'São Paulo', 'SP'),
-('Beatriz Torres', '33344455566', '(11) 96543-2109', 'beatriz@email.com', 'PF', true, '34567-890', 'Rua da Horta', '300', 'Itaim', 'São Paulo', 'SP'),
-('Paisagens & Cia LTDA', '12345678000190', '(11) 3322-1100', 'contato@paisagenscia.com', 'PJ', true, '45678-901', 'Av. Verde', '400', 'Brás', 'São Paulo', 'SP'),
-('Jardim Perfeito Salão', '98765432000121', '(11) 3311-2200', 'contato@jardimperfeito.com', 'PJ', true, '56789-012', 'Rua das Flores', '500', 'Centro', 'São Paulo', 'SP');
+INSERT INTO cliente (nome, cpf_cnpj, telefone, email, tipo, ativo, cep, rua, numero, bairro, cidade, estado, dataNascimento) VALUES 
+('Cláudia Silva', '11122233344', '(11) 98765-4321', 'claudia@email.com', 'PF', true, '12345-678', 'Rua do Jardim', '100', 'Jardim Paulista', 'São Paulo', 'SP', '1991-05-21'),
+('Carlos Rocha', '22233344455', '(11) 97654-3210', 'carlos@email.com', 'PF', true, '23456-789', 'Av. Comercial', '200', 'Moema', 'São Paulo', 'SP', '1988-11-03'),
+('Beatriz Torres', '33344455566', '(11) 96543-2109', 'beatriz@email.com', 'PF', true, '34567-890', 'Rua da Horta', '300', 'Itaim', 'São Paulo', 'SP', '1995-02-14'),
+('Paisagens & Cia LTDA', '12345678000190', '(11) 3322-1100', 'contato@paisagenscia.com', 'PJ', true, '45678-901', 'Av. Verde', '400', 'Brás', 'São Paulo', 'SP', NULL),
+('Jardim Perfeito Salão', '98765432000121', '(11) 3311-2200', 'contato@jardimperfeito.com', 'PJ', true, '56789-012', 'Rua das Flores', '500', 'Centro', 'São Paulo', 'SP', NULL);
 
 -- Inserir cupons para teste
 INSERT INTO cupom (codigo, descricao, valor, data_inicio, validade, condicoes_uso) VALUES 
