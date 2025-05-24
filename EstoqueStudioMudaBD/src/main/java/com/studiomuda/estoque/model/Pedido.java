@@ -13,6 +13,7 @@ public class Pedido {
     private String funcionarioNome; // Campo auxiliar para exibição
     private String funcionarioCargo; // Campo auxiliar para exibição
     private double valorDesconto; // Valor do desconto aplicado pelo cupom
+    private String status; // Novo campo para status do pedido
 
     public Pedido() {}
 
@@ -106,6 +107,14 @@ public class Pedido {
         this.valorDesconto = valorDesconto;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Pedido #" + id +
@@ -113,6 +122,7 @@ public class Pedido {
                 " | Entrega: " + dataEntrega +
                 " | Cliente ID: " + clienteId +
                 " | Funcionário ID: " + funcionarioId +
-                " | Cupom ID: " + cupomId;
+                " | Cupom ID: " + cupomId +
+                " | Status: " + status;
     }
 }

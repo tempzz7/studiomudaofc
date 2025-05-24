@@ -54,8 +54,8 @@ public class DashboardController {
                 // Aplica desconto se houver
                 valorTotal -= pedido.getValorDesconto();
                 dto.valorTotal = Math.max(0, valorTotal);
-                // Status simplificado (pode ser melhorado depois)
-                dto.status = "Concluído";
+                // Status real do pedido
+                dto.status = (pedido.getStatus() != null && !pedido.getStatus().isBlank()) ? pedido.getStatus() : "Desconhecido";
                 lista.add(dto);
             }
         } catch (Exception e) {

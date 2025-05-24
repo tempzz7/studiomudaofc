@@ -67,6 +67,7 @@ public class PedidoDAO {
                 p.setClienteNome(rs.getString("cliente_nome"));
                 p.setFuncionarioNome(rs.getString("funcionario_nome"));
                 p.setFuncionarioCargo(rs.getString("funcionario_cargo"));
+                try { p.setStatus(rs.getString("status")); } catch (SQLException e) { p.setStatus(null); }
                 lista.add(p);
             }
         }
@@ -97,6 +98,7 @@ public class PedidoDAO {
                 p.setClienteNome(rs.getString("cliente_nome"));
                 p.setFuncionarioNome(rs.getString("funcionario_nome"));
                 p.setFuncionarioCargo(rs.getString("funcionario_cargo"));
+                try { p.setStatus(rs.getString("status")); } catch (SQLException e) { p.setStatus(null); }
                 return p;
             }
         }

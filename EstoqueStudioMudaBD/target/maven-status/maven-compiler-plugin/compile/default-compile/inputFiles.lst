@@ -14,6 +14,7 @@
 /home/temp/Área de trabalho/studiomudaofc/EstoqueStudioMudaBD/src/main/java/com/studiomuda/estoque/dao/ClienteDAO.java
 /home/temp/Área de trabalho/studiomudaofc/EstoqueStudioMudaBD/src/main/java/com/studiomuda/estoque/conexao/Conexao.java
 /home/temp/Área de trabalho/studiomudaofc/EstoqueStudioMudaBD/src/main/java/com/studiomuda/estoque/model/Cliente.java
+/home/temp/Área de trabalho/studiomudaofc/EstoqueStudioMudaBD/src/main/java/com/studiomuda/estoque/dto/DashboardDTO.java
 /home/temp/Área de trabalho/studiomudaofc/EstoqueStudioMudaBD/src/main/java/com/studiomuda/estoque/dao/PedidoDAO.java
 /home/temp/Área de trabalho/studiomudaofc/EstoqueStudioMudaBD/src/main/java/com/studiomuda/estoque/controller/ExemploApiController.java
 /home/temp/Área de trabalho/studiomudaofc/EstoqueStudioMudaBD/src/main/java/com/studiomuda/estoque/EstoqueApplication.java
