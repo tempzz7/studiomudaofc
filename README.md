@@ -1,8 +1,7 @@
 # 🌿 Studio Muda - Sistema de Gerenciamento de Estoque
 
-[Documentos Studio Muda](https://drive.google.com/drive/u/0/folders/1qwyT-uzrC67BZYqoUOrW95nYa3ip0eBV)
-
-
+📁 [Documentos Studio Muda](https://drive.google.com/drive/u/0/folders/1qwyT-uzrC67BZYqoUOrW95nYa3ip0eBV)
+📁 [Relatórios 1 e 2 – Studio Muda (Google Drive)](https://drive.google.com/drive/u/0/folders/1qwyT-uzrC67BZYqoUOrW95nYa3ip0eBV)
 
 Sistema web desenvolvido para **Studio Muda LTDA**, empresa especializada em paisagismo e comercialização de produtos naturais. Esta aplicação permite o controle completo de produtos, pedidos, clientes, funcionários e todas as movimentações de estoque em uma interface web moderna e intuitiva.
 
