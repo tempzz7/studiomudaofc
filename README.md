@@ -6,6 +6,7 @@ Este projeto foi desenvolvido pelos discentes João Pedro, Thiago Queiroz, Tiago
 
 📁 [Documentos Studio Muda](https://drive.google.com/drive/u/0/folders/1qwyT-uzrC67BZYqoUOrW95nYa3ip0eBV)
 📁 [Relatórios 1 e 2 – Studio Muda (Google Drive)](https://drive.google.com/drive/u/0/folders/1qwyT-uzrC67BZYqoUOrW95nYa3ip0eBV)
+# # RELATÓRIO FINAL https://docs.google.com/document/d/15dOakVFGxX-SrMhcdkUAETchi7Dv2V3xrCL64MFsMUk/edit?usp=sharing
 
 Desenvolvemos um sistem web para **Studio Muda LTDA**, empresa especializada em paisagismo e comercialização de produtos naturais. Esta aplicação permite o controle completo de produtos, pedidos, clientes, funcionários e todas as movimentações de estoque em uma interface web moderna e intuitiva.
 
