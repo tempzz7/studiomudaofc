@@ -186,21 +186,13 @@ O sistema implementa:
 
 ## 💡 Autores
 
-Este projeto foi desenvolvido como parte da disciplina de Banco de Dados.
+Este projeto foi desenvolvido pelos discentes João Pedro, Thiago Queiroz, Tiago Cavalcanti e Vitória Régia, alunos da CESAR School, como parte da disciplina de Banco de Dados, ministrada pela professora Gabrielle Canalle.
 
 ---
 
 ## 📞 Suporte
 
 Para suporte técnico ou dúvidas sobre o sistema, entre em contato com a equipe de desenvolvimento.
-
----
-
-## 📂 Acesso aos Arquivos
-
-Os arquivos relacionados ao projeto podem ser acessados através do seguinte link:
-
-[Google Drive - Studio Muda](https://drive.google.com/drive/folders/1qwyT-uzrC67BZYqoUOrW95nYa3ip0eBV)
 
 ---
 
